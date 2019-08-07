@@ -1,0 +1,200 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link rel="Bookmark" href="/favicon.ico" >
+<link rel="Shortcut Icon" href="/favicon.ico" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="../lib/html5shiv.js"></script>
+<script type="text/javascript" src="../lib/respond.min.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="../static/h-ui/css/H-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="../static/h-ui.admin/css/H-ui.admin.css" />
+<link rel="stylesheet" type="text/css" href="../lib/Hui-iconfont/1.0.8/iconfont.css" />
+<link rel="stylesheet" type="text/css" href="../static/h-ui.admin/skin/default/skin.css" id="skin" />
+<link rel="stylesheet" type="text/css" href="../static/h-ui.admin/css/style.css" />
+
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>H-ui.admin v3.1</title>
+<meta name="keywords" content="H-ui.admin v3.1,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
+<meta name="description" content="H-ui.admin v3.1，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+</head>
+<body>
+<header class="navbar-wrapper">
+	<div class="navbar navbar-fixed-top">
+		<div class="container-fluid cl"> <a class="logo navbar-logo f-l mr-10 hidden-xs" href="/aboutHui.shtml">酒店管理系统</a> <a class="logo navbar-logo-m f-l mr-10 visible-xs" href="/aboutHui.shtml">酒店管理系统</a> 
+			<span class="logo navbar-slogan f-l mr-10 hidden-xs">v1.0</span> 
+			<a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;">&#xe667;</a>
+			<nav class="nav navbar-nav">
+				<ul class="cl">
+					<li class="dropDown dropDown_hover"><a href="javascript:;" class="dropDown_A"><i class="Hui-iconfont">&#xe600;</i> 新增 <i class="Hui-iconfont">&#xe6d5;</i></a>
+						<ul class="dropDown-menu menu radius box-shadow">
+							<li><a href="javascript:;" onclick="note_add('添加笔记','/note/toaddnote.do')"><i class="Hui-iconfont">&#xe616;</i>笔记</a></li>
+							<li><a href="javascript:;" onclick="notebook_add('添加笔记本本','/book/toaddnotebook.do')"><i class="Hui-iconfont">&#xe720;</i>笔记本</a></li>
+							
+					</ul>
+				</li>
+			</ul>
+		</nav>
+		<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
+			<ul class="cl">
+				<li>超级管理员</li>
+				<li class="dropDown dropDown_hover">
+					<a href="#" class="dropDown_A">admin <i class="Hui-iconfont">&#xe6d5;</i></a>
+					<ul class="dropDown-menu menu radius box-shadow">
+						<li><a href="javascript:;" onClick="myselfinfo()">个人信息</a></li>
+						<li><a href="#">切换账户</a></li>
+						<li><a href="#">退出</a></li>
+				</ul>
+			</li>
+				<li id="Hui-msg"> <a href="#" title="消息"><span class="badge badge-danger">1</span><i class="Hui-iconfont" style="font-size:18px">&#xe68a;</i></a> </li>
+				<li id="Hui-skin" class="dropDown right dropDown_hover"> <a href="javascript:;" class="dropDown_A" title="换肤"><i class="Hui-iconfont" style="font-size:18px">&#xe62a;</i></a>
+					<ul class="dropDown-menu menu radius box-shadow">
+						<li><a href="javascript:;" data-val="default" title="默认（黑色）">默认（黑色）</a></li>
+						<li><a href="javascript:;" data-val="blue" title="蓝色">蓝色</a></li>
+						<li><a href="javascript:;" data-val="green" title="绿色">绿色</a></li>
+						<li><a href="javascript:;" data-val="red" title="红色">红色</a></li>
+						<li><a href="javascript:;" data-val="yellow" title="黄色">黄色</a></li>
+						<li><a href="javascript:;" data-val="orange" title="橙色">橙色</a></li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+	</div>
+</div>
+</header>
+<aside class="Hui-aside">
+	<div id="book_dl" class="menu_dropdown bk_2">
+	</div>
+</aside>
+<div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>
+<section class="Hui-article-box" style="width:90%;">
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>笔记标题：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" class="input-text" value=""  autocomplete="off" id="articletitle" name="articletitle" readonly>
+			</div>
+		</div>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>笔记编号：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<input type="text" class="input-text" value=""  autocomplete="off" id="articleId" name="articleId" readonly>
+			</div>
+		</div>
+			<div>
+				<script id="editor" type="text/plain" style="height:400px;"></script>
+		</div>
+			<div class="row cl">
+				<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+					<input id="saveNote" class="btn btn-primary radius" type="button" value="&nbsp;&nbsp;保存&nbsp;&nbsp;">
+			</div>
+	</div>
+</section>
+
+<div class="contextMenu" id="Huiadminmenu">
+	<ul>
+		<li id="closethis">关闭当前 </li>
+		<li id="closeall">关闭全部 </li>
+</ul>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="../lib/jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" charset="utf-8" src="../lib/ueditor/1.4.3/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="../lib/ueditor/1.4.3/ueditor.all.min.js"> </script>
+<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+<script type="text/javascript" charset="utf-8" src="../lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+
+<script type="text/javascript" src="../lib/base.js"></script>
+<script type="text/javascript">
+$(function(){
+	var ue = UE.getEditor('editor');
+});
+$("#saveNote").click(function(){
+	$.ajax({
+ 		url:path+"/note/updatenote.do",
+		data:{"note_id":$("#articleId").val(),
+				"note_content":UE.getEditor('editor').getContent()},
+		type:"post",
+		dataType:"json",
+		success:function(result){
+			layer.msg('笔记保存成功!',{icon: 1,time:1000});
+		},
+		error:function(){
+			layer.msg('笔记保存失败!',{icon: 2,time:1000});
+		}
+	});
+});
+$(".Hui-aside").on("click","dl dd a",function(){
+	$("#articleId").val($(this).attr("id"));
+	$("#articletitle").val($(this).attr("data-title"));
+	$.ajax({
+		url:path+"/note/loadNoteContent.do",
+		type:"post",
+		data:{"note_id":$(this).attr("id")},
+		dataType:"json",
+		success:function(result){
+			UE.getEditor('editor').setContent(result.data);
+			//console.log(result.data);
+		},
+		error:function(){
+			layer.msg('笔记加载失败!',{icon: 0,time:1000});
+		}
+	});
+});
+//添加笔记
+function note_add(title,url,id){
+	var index = layer.open({
+		type: 2,
+		title: title,
+		content: path+url
+	});
+	layer.full(index);
+};
+
+/*添加笔记本*/
+function notebook_add(title,url,id){
+	var index = layer.open({
+		type: 2,
+		title: title,
+		content: path+url
+	});
+	layer.full(index);
+}
+</script>
+
+<script type="text/javascript">
+	$(function(){
+		loadUserBooks();
+		//createDl("4162484d-70cc-4eea-a2f5-63b1fbc67624","english");
+		//createDl("5b5f8989-bde0-40d4-8ef5-9b04379f9d06","chinese");
+		$(".Hui-aside").on("click","dl dt",function(){
+			//var text = $(this).text();
+			
+			//如果点中的是自己，将去除selected类。
+			if($(this).hasClass("selected")){
+				$(this).removeClass("selected");
+			}else{
+				$(this).closest('dl').siblings().children('dt').removeClass("selected");
+				$(this).addClass("selected");
+			}
+			//向下展示
+			$(this).next().slideToggle();
+			//其他元素 
+			//closest 最近的父元素 ，sillings返回所有的同胞元素
+			$(this).closest('dl').siblings().find("dd").slideUp();
+		});
+	});
+</script>
+<script type="text/javascript" src="../static/h-ui/js/H-ui.min.js"></script>
+<script type="text/javascript" src="../lib/jquery.contextmenu/jquery.contextmenu.r2.js"></script>
+</body>
+</html>

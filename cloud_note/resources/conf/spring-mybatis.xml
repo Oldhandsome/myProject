@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"  
+	xmlns:jee="http://www.springframework.org/schema/jee" 
+	xmlns:jms="http://www.springframework.org/schema/jms"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/jms http://www.springframework.org/schema/tx/spring-jms-3.2.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/tx/spring-lang-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		">
+	<!-- 数据库的配置 -->
+	<util:properties id="config" location="classpath:conf/database.properties"/>
+	<!-- 配置连接池 -->
+	<beans:bean id="ds" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<beans:property name="driverClassName"  value="#{config.driverClass}"/>
+		<beans:property name="url" value="#{config.url}"/>
+		<beans:property name="username" value="#{config.username}"/>
+		<beans:property name="password" value="#{config.password}"/>
+	</beans:bean>	
+	<!-- 配置SqlSessionFactory -->
+	<beans:bean id="ssfb" class="org.mybatis.spring.SqlSessionFactoryBean">
+			<property name="mapperLocations" value="classpath:mapper/*.xml"/>
+			<property name="dataSource" ref="ds" />
+	</beans:bean>
+	<!-- 扫描dao包 -->
+	<beans:bean
+		class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+			<property name="basePackage" value="dao"/>
+	</beans:bean>
+	
+	<context:component-scan base-package="controller"/>
+	<context:component-scan base-package="service"/>
+	<mvc:annotation-driven/>
+	<!-- 配置视图解析器 -->
+	<beans:bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		<beans:property name="basenames" value="conf/views"/>
+		<beans:property name="order" value="1"/>
+	</beans:bean>
+	
+</beans>
+

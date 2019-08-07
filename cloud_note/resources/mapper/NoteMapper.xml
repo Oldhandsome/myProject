@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- XXXMapper.xml 在entity 包中  -->  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"   
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<!--
+ 	namespace 的值是 XXXMapper 接口
+ 	 每个Mapper 接口对应一个配置文件  
+  -->
+<mapper namespace="dao.NoteDao">
+	<select id="findByIds"
+		resultType="entity.Note">
+		select * from note where note_book_id=#{note_book_id} 
+			and note_status_id = #{note_status_id}
+	</select>
+	<select id="loadNoteContent" parameterType="String"
+		resultType="String">
+		select note_content from note where note_id = #{note_id}	
+	</select>
+	<update id="updateNote" >
+		update note set note_content = #{note_content},
+					 	updated_at=#{updated_at} 
+						where note_id = #{note_id}
+	</update>
+</mapper>

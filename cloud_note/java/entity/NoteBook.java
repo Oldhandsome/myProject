@@ -45,14 +45,14 @@ public class NoteBook implements Serializable{
 	public void setExplaination(String explaination) {
 		this.explaination = explaination;
 	}
-	public long getCreated_at() {
-		return created_at.getTime();
+	public Timestamp getCreated_at() {
+		return created_at;
 	}
 	public void setCreated_at(long created_at) {
 		this.created_at = new Timestamp(created_at);
 	}
-	public long getUpdated_at() {
-		return updated_at.getTime();
+	public Timestamp getUpdated_at() {
+		return updated_at;
 	}
 	public void setUpdated_at(long updated_at) {
 		this.updated_at = new Timestamp(updated_at);

@@ -30,11 +30,12 @@
 </head>
 <body>
 <article class="page-container">
-	<form class="form form-horizontal" id="form-article-add">
+	<form class="form form-horizontal" name="form-article-add" id="form-article-add">
+		<input type="hidden" id="user_id" name="user_id" value="">
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>笔记本名：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="notebook_name" name="notebook_name">
+				<input type="text" class="input-text" value="" placeholder="" autocomplete="off" id="notebook_name" name="notebook_name">
 			</div>
 		</div>
 		<div class="row cl">
@@ -50,14 +51,13 @@
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">简介：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<textarea id="explaination" name="abstract" cols="" rows="" class="textarea"  placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" onKeyUp="$.Huitextarealength(this,200)"></textarea>
-				<p class="textarea-numberbar"><em class="textarea-length">0</em>/200</p>
+				<textarea id="explaination" name="explaination" cols="" rows="" class="textarea"  placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" ></textarea>
+				<p class="textarea-numberbar"><em class="textarea-length">0</em>/500</p>
 			</div>
 		</div>
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
-				<button onClick="notebook_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 创建该笔记本</button>
-				<button onClick="removeIframe();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+				<input id="submitBtn" name="submitBtn" type="submit" class="btn btn-primary radius" value="&nbsp;提&nbsp;&nbsp;&nbsp;&nbsp;交&nbsp;">
 			</div>
 		</div>
 	</form>
@@ -83,32 +83,45 @@ $(function(){
 		radioClass: 'iradio-blue',
 		increaseArea: '20%'
 	});
-};
-function notebook_save_submit(){
-	var user_id = getCookie("user_id");
-	//2.判断得到的cookie中是否含有有效的ID
-	if(user_id == null){
-		window.location.href(path+"/user/tologin.do");
-	}
-	else{
-		$.ajax({
-			url:path+"/book/addnotebook.do",
-			data:{"user_id":user_id,
-					"note_book_name":$("#notebook_name").val(),
-					"note_type_id":$("#note_type_id").val(),
-					"explaination":$("#explaination").val()
-					},
-			type:"post",
-			data:"json",
-			success:function(result){
-				alert("添加笔记本成功");
+});
+</script>
+<script type="text/javascript">
+$(function(){
+	$("#user_id").attr("val",getCookie("user_id"));
+	//表单验证   
+	$("#form-article-add").validate({
+		rules:{
+			notebook_name:{
+				required:true,
 			},
-			error:function(){
-				alert("添加笔记本失败");
+			explaination:{
+				required:true,
 			}
-		});
-	}
-};
+		},
+		submitHandler:function(form){
+			
+			var user_id = getCookie("user_id");
+			console.log("user_id"+user_id);
+			//2.判断得到的cookie中是否含有有效的ID
+			if(user_id == null){
+				window.location.href(path+"/user/tologin.do");
+			}
+			else{
+				$(form).ajaxSubmit({
+					url:path+"/book/addnotebook.do",
+					type:"post",
+					data:"json",
+					success:function(result){
+						alert("添加笔记本成功");
+					},
+					error:function(){
+						alert("添加笔记本失败");
+					}
+				}); 
+			}
+		}
+	});
+});
 </script>
 </body>
 </html>

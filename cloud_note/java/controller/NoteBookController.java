@@ -1,9 +1,9 @@
 package controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import entity.NoteBook;
 import service.NoteBookService;
 import util.NoteResult;
+import util.NoteUtil;
 
 @Controller
 @RequestMapping("/book")
@@ -30,16 +31,20 @@ public class NoteBookController {
 	public String toAddNoteBook(){
 		return "toAddNoteBook";
 	}
-	
+	@ResponseBody
 	@RequestMapping("/addnotebook.do")
-	public NoteResult<NoteBook> addNoteBook(HttpServletRequest req){
-		NoteResult<NoteBook> result = new NoteResult<NoteBook>();
-		String user_id = req.getParameter("user_id");
-		String note_book_name = req.getParameter("note_book_name");
-		String note_type_id = req.getParameter("note_type_id");
-		String explaination = req.getParameter("explaination");
+	public NoteResult<String> addNoteBook(HttpServletRequest req){
+		NoteResult<String> result = new NoteResult<String>();
+		NoteBook noteBook = new NoteBook();
+		noteBook.setNote_book_id(NoteUtil.createId());
+		noteBook.setNote_book_name(req.getParameter("notebook_name"));
+		noteBook.setNote_book_type_id(req.getParameter("note_type_id"));
+		noteBook.setUser_id(req.getParameter("user_id"));
+		noteBook.setCreated_at(new Date().getTime());
+		noteBook.setExplaination(req.getParameter("explaination"));
 		
-		
+		System.out.println(noteBook);
+		//result = nbs.addNoteBook(noteBook);
 		return result;
 	}
 }

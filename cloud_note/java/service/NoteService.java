@@ -10,4 +10,5 @@ public interface NoteService {
 			String note_book_id,String note_status_id);
 	public NoteResult<String> loadNoteContent(String note_id);
 	public NoteResult<String> updateNote(String note_id,String note_content);
+	public NoteResult<String> addNote(Note note);
 }

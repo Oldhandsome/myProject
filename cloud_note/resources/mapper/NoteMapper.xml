@@ -21,4 +21,12 @@
 					 	updated_at = #{updated_at}
 						where note_id = #{note_id}
 	</update>
+	<insert id="addNote" parameterType="entity.Note">
+		insert into note(note_id , note_book_id , user_id ,
+							note_status_id , note_type_id , note_title ,
+							created_at , note_content)
+				values (#{note_id} , #{note_book_id} , #{user_id} ,
+							#{note_status_id} , #{note_type_id} , #{note_title} ,
+							UNIX_TIMESTAMP(#{created_at}) , #{note_content} )
+	</insert>
 </mapper>

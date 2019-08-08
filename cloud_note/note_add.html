@@ -30,20 +30,18 @@
 </head>
 <body>
 <article class="page-container">
-	<form class="form form-horizontal" id="form-article-add">
+	<form class="form form-horizontal" id="note-add" name="note-add">
+		<input type="hidden" id="user_id" name="user_id" value="">
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>笔记标题：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="note_title" name="note_title">
+				<input type="text" class="input-text" value="" placeholder="" autocomplete="off" id="note_title" name="note_title">
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>笔记本名：</label>
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>所属笔记本：</label>
 			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
 				<select name="note_book_id" class="select" id="note_book_id">
-					<option value="0">笔记本一</option>
-					<option value="1">笔记本二</option>
-					<option value="2">笔记本三</option>
 				</select>
 				</span> </div>
 		</div>
@@ -60,12 +58,12 @@
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2">笔记内容：</label>
 			<div class="formControls col-xs-8 col-sm-9"> 
-				<script id="editor" type="text/plain" style="width:100%;height:400px;"></script> 
+				<script id="editor" name="note_content" type="text/plain" style="width:100%;height:400px;"></script> 
 			</div>
 		</div>
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
-				<button onClick="note_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i>提交笔记</button>
+				<input id="submitBtn" name="submitBtn" type="submit" class="btn btn-primary radius" value="&nbsp;提&nbsp;&nbsp;&nbsp;&nbsp;交&nbsp;">
 			</div>
 		</div>
 	</form>
@@ -86,41 +84,49 @@
 <script type="text/javascript" src="../lib/ueditor/1.4.3/ueditor.config.js"></script> 
 <script type="text/javascript" src="../lib/ueditor/1.4.3/ueditor.all.min.js"> </script> 
 <script type="text/javascript" src="../lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
+<script type="text/javascript" src="../lib/base.js"></script>
 <script type="text/javascript">
 $(function(){
 	var ue = UE.getEditor('editor');
-	
 	$('.skin-minimal input').iCheck({
 		checkboxClass: 'icheckbox-blue',
 		radioClass: 'iradio-blue',
 		increaseArea: '20%'
 	});
-};
-function note_save_submit(){
-	var user_id = getCookie("user_id");
-	//2.判断得到的cookie中是否含有有效的ID
-	if(user_id == null){
-		window.location.href(path+"/user/tologin.do");
-	}
-	else{
-		$.ajax({
-			url:path+"/note/addnote.do",
-			data:{"note_book_id":user_id,
-					"note_title":$("#note_title").val(),
-					"note_type_id":$("#note_type_id").val(),
-					"note_content":UE.getEditor('editor').getContent()
-					},
-			type:"post",
-			data:"json",
-			success:function(result){
-				layer.msg('笔记添加成功!',{icon: 1,time:1000});
+	$("#note-add").validate({
+		rules:{
+			note_title:{
+				required:true,
 			},
-			error:function(){
-				layer.msg('笔记添加失败!',{icon: 2,time:1000});
+			note_content:{
+				required:true,
 			}
-		});
-	}
-};
+		},
+		submitHandler:function(form){
+			var user_id = getCookie("user_id");
+			//2.判断得到的cookie中是否含有有效的ID
+			if(user_id == null){
+				window.location.href = path+"/user/tologin.do";
+			}
+			else{
+				$(form).ajaxSubmit({
+					url:path+"/note/addnote.do",
+					type:"post",
+					dataType:"json",
+					success:function(result){
+						layer.msg('笔记添加成功!',{icon: 1,time:1000});
+						parent.location.reload(); // 父页面刷新
+						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+						parent.layer.close(index);
+					},
+					error:function(){
+						layer.msg('笔记添加失败!',{icon: 2,time:1000});
+					}
+				});
+			}
+		}
+	});
+});
 </script>
 <!--/请在上方写此页面业务相关的脚本-->
 </body>

@@ -53,4 +53,12 @@ public class NoteServiceImpl implements NoteService{
 		result.setMsg("更新成功");
 		return result;
 	}
+	@Override
+	public NoteResult<String> addNote(Note note) {
+		NoteResult<String> result = new NoteResult<String>();
+		dao.addNote(note);
+		result.setStatus(0);
+		result.setMsg("插入成功");
+		return result;
+	}
 }

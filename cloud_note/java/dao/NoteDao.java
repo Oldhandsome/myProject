@@ -17,5 +17,5 @@ public interface NoteDao {
 	public void updateNote(@Param("note_id") String note_id,
 							@Param("note_content") String note_content,
 							@Param("updated_at") long updated_at);
-	
+	public void addNote(Note note);
 }

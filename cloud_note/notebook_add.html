@@ -30,7 +30,7 @@
 </head>
 <body>
 <article class="page-container">
-	<form class="form form-horizontal" name="form-article-add" id="form-article-add">
+	<form class="form form-horizontal" name="notebook-add" id="notebook-add">
 		<input type="hidden" id="user_id" name="user_id" value="">
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>笔记本名：</label>
@@ -87,7 +87,7 @@ $(function(){
 </script>
 <script type="text/javascript">
 $(function(){
-	$("#form-article-add").validate({
+	$("#notebook-add").validate({
 		rules:{
 			notebook_name:{
 				required:true,
@@ -97,9 +97,7 @@ $(function(){
 			}
 		},
 		submitHandler:function(form){
-			
 			var user_id = getCookie("user_id");
-			console.log("user_id"+user_id);
 			//2.判断得到的cookie中是否含有有效的ID
 			if(user_id == null){
 				window.location.href(path+"/user/tologin.do");

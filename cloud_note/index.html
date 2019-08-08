@@ -29,16 +29,28 @@
 <body>
 <header class="navbar-wrapper">
 	<div class="navbar navbar-fixed-top">
-		<div class="container-fluid cl"> <a class="logo navbar-logo f-l mr-10 hidden-xs" href="/aboutHui.shtml">酒店管理系统</a> <a class="logo navbar-logo-m f-l mr-10 visible-xs" href="/aboutHui.shtml">酒店管理系统</a> 
+		<div class="container-fluid cl"> <a class="logo navbar-logo f-l mr-10 hidden-xs" href="/aboutHui.shtml">云笔记自助系统</a> <a class="logo navbar-logo-m f-l mr-10 visible-xs" href="/aboutHui.shtml">云笔记自助系统</a> 
 			<span class="logo navbar-slogan f-l mr-10 hidden-xs">v1.0</span> 
 			<a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;">&#xe667;</a>
 			<nav class="nav navbar-nav">
 				<ul class="cl">
-					<li class="dropDown dropDown_hover"><a href="javascript:;" class="dropDown_A"><i class="Hui-iconfont">&#xe600;</i> 新增 <i class="Hui-iconfont">&#xe6d5;</i></a>
+					<li class="dropDown dropDown_hover"><a href="javascript:;" class="dropDown_A"><i class="Hui-iconfont">&#xe600;</i> 新增  <i class="Hui-iconfont">&#xe6d5;</i></a>
 						<ul class="dropDown-menu menu radius box-shadow">
 							<li><a href="javascript:;" onclick="note_add('添加笔记','/note/toaddnote.do')"><i class="Hui-iconfont">&#xe616;</i>笔记</a></li>
 							<li><a href="javascript:;" onclick="notebook_add('添加笔记本本','/book/toaddnotebook.do')"><i class="Hui-iconfont">&#xe720;</i>笔记本</a></li>
 							
+					</ul>
+				</li>
+				<li class="dropDown dropDown_hover"><a href="javascript:;" class="dropDown_A"><i class="Hui-iconfont">&#xe6a1;</i> 删除  <i class="Hui-iconfont">&#xe6d5;</i></a>
+						<ul class="dropDown-menu menu radius box-shadow">
+							<li><a href="javascript:;" onclick="note_delete('删除笔记','/note/todeletenote.do')"><i class="Hui-iconfont">&#xe616;</i>笔记</a></li>
+							<li><a href="javascript:;" onclick="notebook_delete('删除笔记本','/book/todeletenotebook.do')"><i class="Hui-iconfont">&#xe720;</i>笔记本</a></li>
+					</ul>
+				</li>
+				<li class="dropDown dropDown_hover"><a href="javascript:;" class="dropDown_A"><i class="Hui-iconfont">&#xe61d;</i> 修改  <i class="Hui-iconfont">&#xe6d5;</i></a>
+						<ul class="dropDown-menu menu radius box-shadow">
+							<li><a href="javascript:;" onclick="note_delete('修改笔记','/note/todeletenote.do')"><i class="Hui-iconfont">&#xe616;</i>笔记</a></li>
+							<li><a href="javascript:;" onclick="notebook_delete('修改笔记本','/book/todeletenotebook.do')"><i class="Hui-iconfont">&#xe720;</i>笔记本</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -119,19 +131,24 @@ $(function(){
 	var ue = UE.getEditor('editor');
 });
 $("#saveNote").click(function(){
-	$.ajax({
- 		url:path+"/note/updatenote.do",
-		data:{"note_id":$("#articleId").val(),
-				"note_content":UE.getEditor('editor').getContent()},
-		type:"post",
-		dataType:"json",
-		success:function(result){
-			layer.msg('笔记保存成功!',{icon: 1,time:1000});
-		},
-		error:function(){
-			layer.msg('笔记保存失败!',{icon: 2,time:1000});
-		}
-	});
+	if($("#articleId").val() == "" || $("#articleId") == null){
+		layer.msg('请选择一个笔记!',{icon: 0,time:1000});
+	}
+	else{
+		$.ajax({
+	 		url:path+"/note/updatenote.do",
+			data:{"note_id":$("#articleId").val(),
+					"note_content":UE.getEditor('editor').getContent()},
+			type:"post",
+			dataType:"json",
+			success:function(result){
+				layer.msg('笔记保存成功!',{icon: 1,time:1000});
+			},
+			error:function(){
+				layer.msg('笔记保存失败!',{icon: 2,time:1000});
+			}
+		});
+	}
 });
 $(".Hui-aside").on("click","dl dd a",function(){
 	$("#articleId").val($(this).attr("id"));
@@ -155,7 +172,21 @@ function note_add(title,url,id){
 	var index = layer.open({
 		type: 2,
 		title: title,
-		content: path+url
+		content: path+url,
+		success: function (layero, index) {
+            var body = layer.getChildFrame('body', index);
+            var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+            //console.log(body.html()) //得到iframe页的body内容
+            //初始化表单数据的值
+            body.find("#user_id").val($.cookie("user_id"));
+            for(var i = 0; i < $("#book_dl dl").length ; i++){
+            	var opt = '<option></option>';
+    			var $option = $(opt);
+    			$option.attr("value",$("#book_dl").find("dl").eq(i).attr("data-bookId"));
+                $option.text($("#book_dl").find("dl").eq(i).children("dt").text());
+                body.find("#note_book_id").append($option); //要修改的每个td的值存为变量传进去
+            }
+        }
 	});
 	layer.full(index);
 };
@@ -181,11 +212,8 @@ function notebook_add(title,url,id){
 <script type="text/javascript">
 	$(function(){
 		loadUserBooks();
-		//createDl("4162484d-70cc-4eea-a2f5-63b1fbc67624","english");
 		//createDl("5b5f8989-bde0-40d4-8ef5-9b04379f9d06","chinese");
 		$(".Hui-aside").on("click","dl dt",function(){
-			//var text = $(this).text();
-			
 			//如果点中的是自己，将去除selected类。
 			if($(this).hasClass("selected")){
 				$(this).removeClass("selected");

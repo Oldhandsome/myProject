@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import entity.Note;
 import service.NoteService;
 import util.NoteResult;
+import util.NoteUtil;
 
 @Controller
 @RequestMapping("/note")
@@ -58,4 +60,26 @@ public class NoteController {
 		return result;
 	}
 	
+	@RequestMapping("/toaddnote.do")
+	public String toaddnote(){
+		return "toAddNote";
+	}
+	@ResponseBody
+	@RequestMapping("/addnote.do")
+	public NoteResult<String> addNote(HttpServletRequest req){
+		NoteResult<String> result = new NoteResult<String>();
+		Note note = new Note();
+		note.setUser_id(req.getParameter("user_id"));
+		note.setNote_book_id(req.getParameter("note_book_id"));
+		note.setNote_status_id("1");
+//		现在还没有note_type_id
+//		req.getParameter("note_type_id")
+		note.setNote_type_id(null);
+		note.setNote_title(req.getParameter("note_title"));
+		note.setNote_content(req.getParameter("note_content"));
+		note.setNote_id(NoteUtil.createId());
+		note.setCreated_at(new Date().getTime());
+		result = ns.addNote(note);
+		return result;
+	}
 }

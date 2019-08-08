@@ -44,7 +44,7 @@ public class NoteBookController {
 		noteBook.setExplaination(req.getParameter("explaination"));
 		
 		System.out.println(noteBook);
-		//result = nbs.addNoteBook(noteBook);
+		result = nbs.addNoteBook(noteBook);
 		return result;
 	}
 }

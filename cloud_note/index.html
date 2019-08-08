@@ -137,8 +137,8 @@ $(".Hui-aside").on("click","dl dd a",function(){
 	$("#articleId").val($(this).attr("id"));
 	$("#articletitle").val($(this).attr("data-title"));
 	$.ajax({
-		url:path+"/note/loadNoteContent.do",
-		type:"post",
+			url:path+"/note/loadNoteContent.do",
+			type:"post",
 		data:{"note_id":$(this).attr("id")},
 		dataType:"json",
 		success:function(result){
@@ -165,7 +165,14 @@ function notebook_add(title,url,id){
 	var index = layer.open({
 		type: 2,
 		title: title,
-		content: path+url
+		content: path+url,
+		success: function (layero, index) {
+            var body = layer.getChildFrame('body', index);
+            var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+            //console.log(body.html()) //得到iframe页的body内容
+            //初始化表单数据的值
+            body.find("#user_id").val($.cookie("user_id")); //要修改的每个td的值存为变量传进去
+        }
 	});
 	layer.full(index);
 }

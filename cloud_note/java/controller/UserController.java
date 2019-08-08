@@ -47,8 +47,13 @@ public class UserController {
 			req.getSession().setAttribute("user_id", result.getData().getUser_id());
 			Cookie cookie = new Cookie("user_id", result.getData().getUser_id());
 			Cookie cookie2 = new Cookie("user_name", result.getData().getUser_name());
-			cookie.setMaxAge(-1);
-			cookie2.setMaxAge(-1);
+			cookie.setMaxAge(1800);
+			cookie2.setMaxAge(1800);
+			//*****非常重要，cookie的保存路径不同，
+			//导致有的请求不发送全部cookie，ajax请求
+			//例如/cloud/note 就不能发送/cloud_note/user下的cookie
+			cookie.setPath("/cloud_note");
+			cookie2.setPath("/cloud_note");
 			res.addCookie(cookie);
 			res.addCookie(cookie2);
 		}

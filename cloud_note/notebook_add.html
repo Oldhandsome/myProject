@@ -87,8 +87,6 @@ $(function(){
 </script>
 <script type="text/javascript">
 $(function(){
-	$("#user_id").attr("val",getCookie("user_id"));
-	//表单验证   
 	$("#form-article-add").validate({
 		rules:{
 			notebook_name:{
@@ -113,6 +111,9 @@ $(function(){
 					data:"json",
 					success:function(result){
 						alert("添加笔记本成功");
+						parent.location.reload(); // 父页面刷新
+						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+						parent.layer.close(index);
 					},
 					error:function(){
 						alert("添加笔记本失败");

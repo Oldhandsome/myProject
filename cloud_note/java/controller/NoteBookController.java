@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import entity.Note;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,10 +32,11 @@ public class NoteBookController {
 	public String toAddNoteBook(){
 		return "toAddNoteBook";
 	}
-	@ResponseBody
+
+
 	@RequestMapping("/addnotebook.do")
-	public NoteResult<String> addNoteBook(HttpServletRequest req){
-		NoteResult<String> result = new NoteResult<String>();
+	@ResponseBody
+	public NoteResult<NoteBook> addNoteBook(HttpServletRequest req){
 		NoteBook noteBook = new NoteBook();
 		noteBook.setNote_book_id(NoteUtil.createId());
 		noteBook.setNote_book_name(req.getParameter("notebook_name"));
@@ -42,9 +44,9 @@ public class NoteBookController {
 		noteBook.setUser_id(req.getParameter("user_id"));
 		noteBook.setCreated_at(new Date().getTime());
 		noteBook.setExplaination(req.getParameter("explaination"));
-		
-		System.out.println(noteBook);
-		result = nbs.addNoteBook(noteBook);
+		//System.out.println(noteBook);
+		NoteResult<NoteBook> result = nbs.addNoteBook(noteBook);
+//		System.out.println(result);
 		return result;
 	}
 }

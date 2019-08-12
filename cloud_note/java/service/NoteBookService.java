@@ -8,5 +8,5 @@ import util.NoteResult;
 public interface NoteBookService {
 
 	public NoteResult<List<NoteBook>> loadUserNoteBooks(String user_id);
-	public NoteResult<String> addNoteBook(NoteBook book);
+	public NoteResult<NoteBook> addNoteBook(NoteBook book);
 }

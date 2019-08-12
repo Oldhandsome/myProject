@@ -12,8 +12,9 @@ import util.NoteResult;
 
 @Service("noteBookServiceImpl")
 public class NoteBookServiceImpl implements NoteBookService{
-	@Resource(name="noteBookDaoImpl")
+	@Resource(name = "noteBookDaoImpl")
 	private NoteBookDao dao;
+
 	@Override
 	public NoteResult<List<NoteBook>> loadUserNoteBooks(String user_id) {
 		List<NoteBook> books = dao.findByUserId(user_id);
@@ -34,11 +35,18 @@ public class NoteBookServiceImpl implements NoteBookService{
 		return result;
 	}
 	@Override
-	public NoteResult<String> addNoteBook(NoteBook book) {
-		NoteResult<String> result = new NoteResult<String>();
-		dao.addNoteBook(book);
-		result.setStatus(0);
-		result.setMsg("笔记本添加成功");
+	public NoteResult<NoteBook> addNoteBook(NoteBook book) {
+		NoteResult<NoteBook> result = new NoteResult<NoteBook>();
+		int rows = dao.addNoteBook(book);
+//		int rows =1;
+		if (rows == 1){
+			result.setStatus(0);
+			result.setMsg("笔记本添加成功");
+			result.setData(book);
+		}else{
+			result.setStatus(1);
+			result.setMsg("笔记本添加错误");
+		}
 		return result;
 	}
 	

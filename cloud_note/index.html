@@ -17,7 +17,11 @@
 <link rel="stylesheet" type="text/css" href="../lib/Hui-iconfont/1.0.8/iconfont.css" />
 <link rel="stylesheet" type="text/css" href="../static/h-ui.admin/skin/default/skin.css" id="skin" />
 <link rel="stylesheet" type="text/css" href="../static/h-ui.admin/css/style.css" />
-
+    <style>
+        #second {
+            display:none
+        }
+    </style>
 <!--[if IE 6]>
 <script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
@@ -150,23 +154,6 @@ $("#saveNote").click(function(){
 		});
 	}
 });
-$(".Hui-aside").on("click","dl dd a",function(){
-	$("#articleId").val($(this).attr("id"));
-	$("#articletitle").val($(this).attr("data-title"));
-	$.ajax({
-			url:path+"/note/loadNoteContent.do",
-			type:"post",
-		data:{"note_id":$(this).attr("id")},
-		dataType:"json",
-		success:function(result){
-			UE.getEditor('editor').setContent(result.data);
-			//console.log(result.data);
-		},
-		error:function(){
-			layer.msg('笔记加载失败!',{icon: 0,time:1000});
-		}
-	});
-});
 //添加笔记
 function note_add(title,url,id){
 	var index = layer.open({
@@ -190,7 +177,6 @@ function note_add(title,url,id){
 	});
 	layer.full(index);
 };
-
 /*添加笔记本*/
 function notebook_add(title,url,id){
 	var index = layer.open({
@@ -208,26 +194,111 @@ function notebook_add(title,url,id){
 	layer.full(index);
 }
 </script>
-
 <script type="text/javascript">
 	$(function(){
 		loadUserBooks();
 		//createDl("5b5f8989-bde0-40d4-8ef5-9b04379f9d06","chinese");
-		$(".Hui-aside").on("click","dl dt",function(){
-			//如果点中的是自己，将去除selected类。
-			if($(this).hasClass("selected")){
-				$(this).removeClass("selected");
-			}else{
-				$(this).closest('dl').siblings().children('dt').removeClass("selected");
-				$(this).addClass("selected");
+	});
+	$(".Hui-aside").on("click","dl dt",function(){
+		//如果点中的是自己，将去除selected类。
+		if($(this).hasClass("selected")){
+			$(this).removeClass("selected");
+		}else{
+			$(this).closest('dl').siblings().children('dt').removeClass("selected");
+			$(this).addClass("selected");
+		}
+		//closest 最近的父元素 ，sillings返回所有的同胞元素
+		$(this).closest('dl').siblings().find('dd').find('ul#second').slideUp();
+		$(this).closest('dl').siblings().find('dd').slideUp();
+		$(this).next().slideToggle();
+	});
+	$(".Hui-aside").on("click","dl dd a.note",function(){
+		$("#articleId").val($(this).attr("id"));
+		$("#articletitle").val($(this).attr("data-title"));
+		$(this).next().slideToggle();
+		$(this).closest('li').siblings().children('ul#second').slideUp();
+		$.ajax({
+			url:path+"/note/loadNoteContent.do",
+			type:"post",
+			data:{"note_id":$(this).attr("id")},
+			dataType:"json",
+			success:function(result){
+				UE.getEditor('editor').setContent(result.data);
+				//console.log(result.data);
+			},
+			error:function(){
+				layer.msg('笔记加载失败!',{icon: 0,time:1000});
 			}
-			//向下展示
-			$(this).next().slideToggle();
-			//其他元素 
-			//closest 最近的父元素 ，sillings返回所有的同胞元素
-			$(this).closest('dl').siblings().find("dd").slideUp();
 		});
 	});
+	$(".Hui-aside").on("click","dl dd ul#second a.starBtn",function(){
+		//获取当前的笔记的ID
+		var note_id= $(this).closest("ul").siblings("a").eq(0).attr("id");
+		var li = $(this).parent();
+		$.ajax({
+            url:path+"/note/starnote.do",
+            data:{"note_id":note_id},
+            type:"post",
+            dataType:"json",
+            success:function(result){
+            	if (result.status == 0){
+					layer.msg('收藏成功',{icon: 1,time:1000});
+                    li.html('<a href="javascript:void(0)" class="remBtn"><i class="Hui-iconfont">&#xe630;</i>取消收藏</a>');
+				}
+				else
+					layer.msg('收藏失败',{icon:0,time:1000})
+			},
+            error:function(){
+                layer.msg('收藏失败',{icon: 0,time:1000});
+            }
+        });
+	});
+    $(".Hui-aside").on("click","dl dd ul#second a.remBtn",function(){
+		// console.log("取消收藏");
+		//获取当前的笔记的ID
+		var note_id= $(this).closest("ul").siblings("a").eq(0).attr("id");
+        var li = $(this).parent();
+		$.ajax({
+			url:path+"/note/unstarnote.do",
+			data:{"note_id":note_id},
+			type:"post",
+			dataType:"json",
+			success:function(result){
+				if (result.status == 0){
+					layer.msg('取消收藏成功',{icon: 1,time:1000});
+					li.html('<a href="javascript:void(0)" class="starBtn"><i class="Hui-iconfont">&#xe69e;</i>收藏</a>');
+				}
+				else
+					layer.msg('取消收藏失败',{icon:0,time:1000})
+			},
+			error:function(){
+				layer.msg('取消收藏失败',{icon: 0,time:1000});
+			}
+		});
+	});
+    $(".Hui-aside").on("click","dl dd ul#second a.moveBtn",function(){
+        var index = layer.open({
+            type: 2,
+            title: '移动笔记',
+            area: ['800px', '600px'],
+            content:path+'/note/tomovenote.do',
+            success: function (layero, index) {
+                var body = layer.getChildFrame('body', index);
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                //初始化表单数据的值
+                body.find("#user_id").val($.cookie("user_id"));
+                body.find("#note_title").val($(this).closest("ul").siblings("a").eq(0).find('i').val());
+                for(var i = 0; i < $("#book_dl dl").length ; i++){
+                    var opt = '<option></option>';
+                    var $option = $(opt);
+                    $option.attr("value",$("#book_dl").find("dl").eq(i).attr("data-bookId"));
+                    $option.text($("#book_dl").find("dl").eq(i).children("dt").text());
+                    body.find("#note_book_id").append($option); //要修改的每个td的值存为变量传进去
+                };
+            },
+        });
+        layer.open(index);
+    });
 </script>
 <script type="text/javascript" src="../static/h-ui/js/H-ui.min.js"></script>
 <script type="text/javascript" src="../lib/jquery.contextmenu/jquery.contextmenu.r2.js"></script>

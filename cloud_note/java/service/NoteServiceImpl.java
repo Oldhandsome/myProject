@@ -13,12 +13,12 @@ import util.NoteResult;
 
 @Service("noteServiceImpl")
 public class NoteServiceImpl implements NoteService{
-	
+
 	@Resource(name="noteDaoImpl")
 	private NoteDao dao;
-	public NoteResult<List<Note>> loadBookNotes(
-			 String note_book_id,String note_status_id){
-		List<Note> notes = dao.findByIds(note_book_id,note_status_id);
+
+	public NoteResult<List<Note>> loadBookNotes(String note_book_id){
+		List<Note> notes = dao.findByIds(note_book_id);
 		NoteResult<List<Note>> result = new NoteResult<List<Note>>();
 		if(notes == null) {
 			result.setStatus(2);
@@ -54,11 +54,77 @@ public class NoteServiceImpl implements NoteService{
 		return result;
 	}
 	@Override
-	public NoteResult<String> addNote(Note note) {
+	public NoteResult<Note> addNote(Note note) {
+		NoteResult<Note> result = new NoteResult<Note>();
+		int row = dao.addNote(note);
+//		int row = 1;
+		if(row  == 1){
+			result.setStatus(0);
+			result.setMsg("插入成功");
+			result.setData(note);
+		}else{
+			result.setStatus(1);
+			result.setMsg("插入笔记失败");
+		}
+		return result;
+	}
+
+	@Override
+	public NoteResult deleteNote(String note_id) {
 		NoteResult<String> result = new NoteResult<String>();
-		dao.addNote(note);
-		result.setStatus(0);
-		result.setMsg("插入成功");
+		int row = dao.deleteNote(note_id);
+		if(row == 1){
+			result.setStatus(0);
+			result.setMsg("笔记删除成功");
+		}
+		else{
+			result.setStatus(1);
+			result.setMsg("笔记删除失败");
+		}
+		return result;
+	}
+
+	@Override
+	public NoteResult starNote(String note_id) {
+		NoteResult result = new NoteResult();
+		int rows = dao.starNote(note_id);
+//		int rows = 1;
+		if(rows == 1){
+			result.setStatus(0);
+			result.setMsg("收藏成功");
+		}else{
+			result.setStatus(1);
+			result.setMsg("收藏出现错误");
+		}
+		return result;
+	}
+
+	@Override
+	public NoteResult unstartNote(String note_id) {
+		NoteResult result = new NoteResult();
+		int rows = dao.unstarNote(note_id);
+		if(rows == 1){
+			result.setStatus(0);
+			result.setMsg("取消收藏成功");
+		}else{
+			result.setStatus(1);
+			result.setMsg("取消收藏出现错误");
+		}
+		return result;
+	}
+
+	@Override
+	public NoteResult moveNote(String note_id, String note_book_id) {
+		NoteResult result = new NoteResult();
+//		int rows = dao.moveNote(note_id,note_book_id,new Date().getTime());
+		int rows = 1;
+		if(rows == 1){
+			result.setStatus(0);
+			result.setMsg("移动笔记成功");
+		}else {
+			result.setStatus(1);
+			result.setMsg("移动笔记失败");
+		}
 		return result;
 	}
 }

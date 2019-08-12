@@ -20,4 +20,6 @@
 		values( #{note_book_id} , #{user_id} , #{note_book_type_id} , 
 				#{note_book_name} , #{explaination} , UNIX_TIMESTAMP(#{created_at}))
 	</insert>
+	<!--<delete id="deleteNoteBook" parameterType="String">
+	</delete>-->
 </mapper>

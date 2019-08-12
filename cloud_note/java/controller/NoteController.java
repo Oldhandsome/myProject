@@ -13,9 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import entity.Note;
@@ -31,7 +29,7 @@ public class NoteController {
 	
 	@RequestMapping("/loadnotes.do")
 	@ResponseBody
-	public Map<String, NoteResult<List<Note>>> loadNotes(HttpServletRequest req) throws JsonParseException, JsonMappingException, IOException {
+	public Map<String, NoteResult<List<Note>>> loadNotes(HttpServletRequest req) throws IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String strings = req.getParameter("array");
 		
@@ -39,7 +37,7 @@ public class NoteController {
 		Map<String, NoteResult<List<Note>>> map = new HashMap<String,NoteResult<List<Note>>>();
 		for(int i = 0 ; i < str.size(); i++) {
 			NoteResult<List<Note>> result = new NoteResult<List<Note>>();
-			result = ns.loadBookNotes(str.get(i), "1");
+			result = ns.loadBookNotes(str.get(i));
 			map.put(str.get(i),result);
 		}
 		return map;
@@ -66,8 +64,8 @@ public class NoteController {
 	}
 	@ResponseBody
 	@RequestMapping("/addnote.do")
-	public NoteResult<String> addNote(HttpServletRequest req){
-		NoteResult<String> result = new NoteResult<String>();
+	public NoteResult<Note> addNote(HttpServletRequest req){
+		NoteResult<Note> result = new NoteResult<Note>();
 		Note note = new Note();
 		note.setUser_id(req.getParameter("user_id"));
 		note.setNote_book_id(req.getParameter("note_book_id"));
@@ -80,6 +78,32 @@ public class NoteController {
 		note.setNote_id(NoteUtil.createId());
 		note.setCreated_at(new Date().getTime());
 		result = ns.addNote(note);
+//		System.out.println(result);
 		return result;
 	}
+
+	@ResponseBody
+    @RequestMapping("/starnote.do")
+    public NoteResult starNote(String note_id){
+	    NoteResult result = new NoteResult();
+	    result =  ns.starNote(note_id);
+	    return result;
+    }
+    @ResponseBody
+    @RequestMapping("/unstarnote.do")
+    public NoteResult unstarNote(String note_id){
+	    NoteResult result = new NoteResult();
+	    result = ns.unstartNote(note_id);
+	    return result;
+    }
+    @RequestMapping("/tomovenote.do")
+    public String tomovenote(){
+	    return "toMoveNote";
+    }
+    @ResponseBody
+    @RequestMapping("/movenote.do")
+    public NoteResult<Note> moveNote(String note_id,String note_book_id){
+	    NoteResult<Note> result = ns.moveNote(note_id,note_book_id);
+	    return result;
+    }
 }

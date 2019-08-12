@@ -104,12 +104,18 @@ $(function(){
 			}
 			else{
 				$(form).ajaxSubmit({
-					url:path+"/book/addnotebook.do",
-					type:"post",
-					data:"json",
+					"url":path+"/book/addnotebook.do",
+					"type":"post",
+					"dataTpye":"json",
 					success:function(result){
-						alert("添加笔记本成功");
-						parent.location.reload(); // 父页面刷新
+						// console.log(result.data);
+						if (result.status == 0){
+							alert(result.msg);
+							var sdl = createDl(result.data.note_book_id,result.data.note_book_name);
+							$("#book_dl",parent.document).append(sdl);
+						}else
+							alert(result.msg);
+						//parent.location.reload(); // 父页面刷新
 						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						parent.layer.close(index);
 					},

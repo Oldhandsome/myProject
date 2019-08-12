@@ -10,13 +10,13 @@
 	<select id="findByIds"
 		resultType="entity.Note">
 		select * from note where note_book_id=#{note_book_id} 
-			and note_status_id = #{note_status_id}
+			and note_status_id in(1,4)
 	</select>
 	<select id="loadNoteContent" parameterType="String"
 		resultType="String">
 		select note_content from note where note_id = #{note_id}	
 	</select>
-	<update id="updateNote" >
+	<update id="updateNote">
 		update note set note_content = #{note_content},
 					 	updated_at = #{updated_at}
 						where note_id = #{note_id}
@@ -29,4 +29,17 @@
 							#{note_status_id} , #{note_type_id} , #{note_title} ,
 							UNIX_TIMESTAMP(#{created_at}) , #{note_content} )
 	</insert>
+	<delete id="deleteNote" parameterType="String">
+		delete from note where note_id = #{note_id}
+	</delete>
+	<update id="starNote" parameterType="String">
+		update note set note_status_id = 4 where note_id = #{note_id}
+	</update>
+	<update id="unstarNote" parameterType="String">
+		update note set note_status_id = 1 where note_id = #{note_id}
+	</update>
+	<update id="moveNote">
+		update note set note_book_id = #{note_book_id} , updated_at = #{updated_at}
+		where note_id = #{note_id}
+	</update>
 </mapper>

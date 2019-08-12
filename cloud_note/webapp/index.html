@@ -277,17 +277,20 @@ function notebook_add(title,url,id){
 		});
 	});
     $(".Hui-aside").on("click","dl dd ul#second a.moveBtn",function(){
+        var title = $(this).closest("ul").siblings("a").eq(0).attr("data-title");
         var index = layer.open({
             type: 2,
             title: '移动笔记',
-            area: ['800px', '600px'],
-            content:path+'/note/tomovenote.do',
+            area: ['500px', '500px'],
+            content:[path+'/note/tomovenote.do', 'no'],
             success: function (layero, index) {
                 var body = layer.getChildFrame('body', index);
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 //初始化表单数据的值
                 body.find("#user_id").val($.cookie("user_id"));
-                body.find("#note_title").val($(this).closest("ul").siblings("a").eq(0).find('i').val());
+                body.find("#note_title").val(title);
+                // $(this).closest("ul").siblings("a").eq(0).attr("id")
+                body.find("#note_title").val();
                 for(var i = 0; i < $("#book_dl dl").length ; i++){
                     var opt = '<option></option>';
                     var $option = $(opt);
@@ -297,7 +300,6 @@ function notebook_add(title,url,id){
                 };
             },
         });
-        layer.open(index);
     });
 </script>
 <script type="text/javascript" src="../static/h-ui/js/H-ui.min.js"></script>

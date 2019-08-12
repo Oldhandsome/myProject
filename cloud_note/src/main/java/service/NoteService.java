@@ -14,4 +14,5 @@ public interface NoteService {
 	public NoteResult starNote(String note_id);
 	public NoteResult unstartNote(String note_id);
 	public NoteResult moveNote(String note_id,String note_book_id);
+	public NoteResult moveToTrush(String note_id);
 }

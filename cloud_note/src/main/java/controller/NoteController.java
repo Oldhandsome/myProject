@@ -102,8 +102,14 @@ public class NoteController {
     }
     @ResponseBody
     @RequestMapping("/movenote.do")
-    public NoteResult<Note> moveNote(String note_id,String note_book_id){
+    public NoteResult moveNote(String note_id,String note_book_id){
 	    NoteResult<Note> result = ns.moveNote(note_id,note_book_id);
 	    return result;
+    }
+    @ResponseBody
+    @RequestMapping("/movetotrash.do")
+    public NoteResult moveToTrush(String note_id){
+    	NoteResult result = ns.moveToTrush(note_id);
+    	return result;
     }
 }

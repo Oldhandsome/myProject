@@ -22,4 +22,5 @@ public interface NoteDao {
 	public int moveNote(@Param("note_id") String note_id,
 						@Param("note_book_id") String note_book_id,
 						@Param("updated_at") long updated_at);
+	public int moveToTrush(String note_id);
 }

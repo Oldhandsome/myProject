@@ -1,0 +1,7 @@
+/WebContent/META-INF
+/WebContent/static
+/WebContent/temp
+/WebContent/Web-INF
+/WebContent/lib
+!/WebContent/lib/base.js
+/src/test

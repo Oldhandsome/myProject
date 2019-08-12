@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.ibatis.javassist.expr.NewArray;
 import org.springframework.stereotype.Service;
 
 import dao.NoteDao;
@@ -115,15 +116,30 @@ public class NoteServiceImpl implements NoteService{
 
 	@Override
 	public NoteResult moveNote(String note_id, String note_book_id) {
-		NoteResult result = new NoteResult();
-//		int rows = dao.moveNote(note_id,note_book_id,new Date().getTime());
-		int rows = 1;
+		NoteResult<Note> result = new NoteResult<Note>();
+		int rows = dao.moveNote(note_id,note_book_id,new Date().getTime());
+//		int rows = 1;
 		if(rows == 1){
 			result.setStatus(0);
 			result.setMsg("移动笔记成功");
 		}else {
 			result.setStatus(1);
 			result.setMsg("移动笔记失败");
+		}
+		return result;
+	}
+	@Override
+	public NoteResult moveToTrush(String note_id){
+		NoteResult result = new NoteResult();
+		int rows = dao.moveToTrush(note_id);
+//		int rows = 1;
+		if(rows == 1){
+			result.setStatus(0);
+			result.setMsg("已移至回收站");
+		}
+		else{
+			result.setStatus(1);
+			result.setMsg("移至回收站出现错误");
 		}
 		return result;
 	}

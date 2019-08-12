@@ -42,4 +42,7 @@
 		update note set note_book_id = #{note_book_id} , updated_at = #{updated_at}
 		where note_id = #{note_id}
 	</update>
+	<update id="moveToTrush" parameterType="String">
+		update note set note_status_id = 2 where note_id = #{note_id}
+	</update>
 </mapper>

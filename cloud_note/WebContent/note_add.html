@@ -30,16 +30,23 @@
 </head>
 <body>
 <article class="page-container">
-	<form class="form form-horizontal" name="notebook-add" id="notebook-add">
+	<form class="form form-horizontal" id="note-add" name="note-add">
 		<input type="hidden" id="user_id" name="user_id" value="">
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>笔记本名：</label>
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>笔记标题：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" autocomplete="off" id="notebook_name" name="notebook_name">
+				<input type="text" class="input-text" value="" placeholder="" autocomplete="off" id="note_title" name="note_title">
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>笔记本类型：</label>
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>所属笔记本：</label>
+			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+				<select name="note_book_id" class="select" id="note_book_id">
+				</select>
+				</span> </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>笔记类型：</label>
 			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
 				<select name="note_type_id" class="select" id="note_type_id">
 					<option value="0">全部类型</option>
@@ -49,10 +56,9 @@
 				</span> </div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2">简介：</label>
-			<div class="formControls col-xs-8 col-sm-9">
-				<textarea id="explaination" name="explaination" cols="" rows="" class="textarea"  placeholder="说点什么...最少输入10个字符" datatype="*10-100" dragonfly="true" nullmsg="备注不能为空！" ></textarea>
-				<p class="textarea-numberbar"><em class="textarea-length">0</em>/500</p>
+			<label class="form-label col-xs-4 col-sm-2">笔记内容：</label>
+			<div class="formControls col-xs-8 col-sm-9"> 
+				<script id="editor" name="note_content" type="text/plain" style="width:100%;height:400px;"></script> 
 			</div>
 		</div>
 		<div class="row cl">
@@ -75,24 +81,24 @@
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/validate-methods.js"></script> 
 <script type="text/javascript" src="../lib/jquery.validation/1.14.0/messages_zh.js"></script>
 <script type="text/javascript" src="../lib/webuploader/0.1.5/webuploader.min.js"></script> 
+<script type="text/javascript" src="../lib/ueditor/1.4.3/ueditor.config.js"></script> 
+<script type="text/javascript" src="../lib/ueditor/1.4.3/ueditor.all.min.js"> </script> 
+<script type="text/javascript" src="../lib/ueditor/1.4.3/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript" src="../lib/base.js"></script>
 <script type="text/javascript">
 $(function(){
+	var ue = UE.getEditor('editor');
 	$('.skin-minimal input').iCheck({
 		checkboxClass: 'icheckbox-blue',
 		radioClass: 'iradio-blue',
 		increaseArea: '20%'
 	});
-});
-</script>
-<script type="text/javascript">
-$(function(){
-	$("#notebook-add").validate({
+	$("#note-add").validate({
 		rules:{
-			notebook_name:{
+			note_title:{
 				required:true,
 			},
-			explaination:{
+			note_content:{
 				required:true,
 			}
 		},
@@ -100,33 +106,38 @@ $(function(){
 			var user_id = getCookie("user_id");
 			//2.判断得到的cookie中是否含有有效的ID
 			if(user_id == null){
-				window.location.href(path+"/user/tologin.do");
+				window.location.href = path+"/user/tologin.do";
 			}
 			else{
 				$(form).ajaxSubmit({
-					"url":path+"/book/addnotebook.do",
-					"type":"post",
-					"dataTpye":"json",
+					url:path+"/note/addnote.do",
+					type:"post",
+					dataType:"json",
 					success:function(result){
-						// console.log(result.data);
 						if (result.status == 0){
-							alert(result.msg);
-							var sdl = createDl(result.data.note_book_id,result.data.note_book_name);
-							$("#book_dl",parent.document).append(sdl);
-						}else
-							alert(result.msg);
+							layer.msg(result.msg,{icon:1,time:1000});
+							// layer.msg('添加笔记成功',{icon: 1,time:2000});
+							var sul = createUl(result.data.note_id,result.data.note_title,result.data.note_status_id);
+							var selector = "dl[data-bookId="+result.data.note_book_id+"]";
+							$(selector,parent.document).find("ul#first").append(sul);
+						}
+						else
+							layer.msg(result.msg,{icon:2,time:1000});
+							// layer.msg('添加笔记失败',{icon: 0,time:2000});
 						//parent.location.reload(); // 父页面刷新
+						
 						var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 						parent.layer.close(index);
 					},
 					error:function(){
-						alert("添加笔记本失败");
+							layer.msg('笔记添加失败!',{icon: 2,time:1000});
 					}
-				}); 
+				});
 			}
 		}
 	});
 });
 </script>
+<!--/请在上方写此页面业务相关的脚本-->
 </body>
 </html>

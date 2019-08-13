@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.ibatis.javassist.expr.NewArray;
+import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.springframework.stereotype.Service;
 
 import dao.NoteDao;
@@ -46,10 +47,14 @@ public class NoteServiceImpl implements NoteService{
 		return result;
 	}
 	@Override
-	public NoteResult<String> updateNote(String note_id, String note_content) {
+	public NoteResult<String> updateNote(String note_id, String note_title,String note_content) {
 		NoteResult<String> result = new NoteResult<String>();
-		long updated_at = new Date().getTime();
-		dao.updateNote(note_id, note_content, updated_at);
+		Note note = new Note();
+		note.setNote_id(note_id);
+		note.setNote_title(note_title);
+		note.setUpdated_at(new Date().getTime());
+		note.setNote_content(note_content);
+		dao.updateNote(note);
 		result.setStatus(0);
 		result.setMsg("更新成功");
 		return result;
@@ -140,6 +145,36 @@ public class NoteServiceImpl implements NoteService{
 		else{
 			result.setStatus(1);
 			result.setMsg("移至回收站出现错误");
+		}
+		return result;
+	}
+	@Override
+	public NoteResult<List<Note>> searchNotes(String user_id, String note_title) {
+		note_title = String.format("%%%s%%", note_title);
+		List<Note> notes = dao.searchNotes(user_id, note_title);
+		NoteResult<List<Note>> result = new NoteResult<List<Note>>();
+		if (notes.isEmpty()) {
+			result.setStatus(1);
+			result.setMsg("模糊查询失败");
+		} else {
+			result.setStatus(0);
+			result.setMsg("模糊查询");
+			result.setData(notes);
+		}
+		return result;
+	}
+	@Override
+	public NoteResult<List<Note>> loadTrush(String user_id){
+		NoteResult<List<Note>> result = new NoteResult<List<Note>>();
+		List<Note> notes = dao.trash(user_id);
+		if(notes.isEmpty()){
+			result.setStatus(1);
+			result.setMsg("查询记录数目为0");
+		}
+		else{
+			result.setStatus(0);
+			result.setMsg("查询成功！");
+			result.setData(notes);
 		}
 		return result;
 	}

@@ -12,9 +12,7 @@ import entity.Note;
 public interface NoteDao {
 	public List<Note> findByIds(String note_book_id);
 	public String loadNoteContent(String note_id);
-	public void updateNote(@Param("note_id") String note_id,
-							@Param("note_content") String note_content,
-							@Param("updated_at") long updated_at);
+	public void updateNote(Note note);
 	public int addNote(Note note);
 	public int deleteNote(String note_id);
 	public int starNote(String note_id);
@@ -23,4 +21,7 @@ public interface NoteDao {
 						@Param("note_book_id") String note_book_id,
 						@Param("updated_at") long updated_at);
 	public int moveToTrush(String note_id);
+	public List<Note> searchNotes(@Param("user_id") String user_id,
+								  @Param("note_title") String note_title);
+	public List<Note> trash(String user_id);
 }

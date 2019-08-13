@@ -27,6 +27,9 @@ public class NoteController {
 	@Resource(name="noteServiceImpl")
 	private NoteService ns;
 	
+	/*
+	 * 根据笔记的id数组  返回笔记列表
+	 */
 	@RequestMapping("/loadnotes.do")
 	@ResponseBody
 	public Map<String, NoteResult<List<Note>>> loadNotes(HttpServletRequest req) throws IOException {
@@ -42,26 +45,38 @@ public class NoteController {
 		}
 		return map;
 	}
-	
+	/*
+	 * 根据笔记的id 加载笔记的内容
+	 */
 	@ResponseBody
 	@RequestMapping("/loadNoteContent.do")
 	public NoteResult<String> loadNoteContent(String note_id) {
 		NoteResult<String> result = ns.loadNoteContent(note_id);
 		return result;
 	}
+	/*
+	 * 更新笔记（包含笔记的内容，笔记的标题）
+	 */
 	@ResponseBody
 	@RequestMapping("/updatenote.do")
 	public NoteResult<String> updateNote(HttpServletRequest req){
 		String note_id = req.getParameter("note_id");
+		String note_title = req.getParameter("note_title");
 		String note_content = new String(req.getParameter("note_content"));
-		NoteResult<String> result = ns.updateNote(note_id, note_content);
+		NoteResult<String> result = ns.updateNote(note_id, note_title,note_content);
 		return result;
 	}
 	
+	/*
+	 * 返回添加笔记视图
+	 */
 	@RequestMapping("/toaddnote.do")
 	public String toaddnote(){
 		return "toAddNote";
 	}
+	/*
+	 * 添加笔记
+	 */
 	@ResponseBody
 	@RequestMapping("/addnote.do")
 	public NoteResult<Note> addNote(HttpServletRequest req){
@@ -82,6 +97,9 @@ public class NoteController {
 		return result;
 	}
 
+	/*
+	 * 收藏笔记
+	 */
 	@ResponseBody
     @RequestMapping("/starnote.do")
     public NoteResult starNote(String note_id){
@@ -89,6 +107,9 @@ public class NoteController {
 	    result =  ns.starNote(note_id);
 	    return result;
     }
+	/*
+	 * 取消收藏笔记
+	 */
     @ResponseBody
     @RequestMapping("/unstarnote.do")
     public NoteResult unstarNote(String note_id){
@@ -96,20 +117,57 @@ public class NoteController {
 	    result = ns.unstartNote(note_id);
 	    return result;
     }
+    /*
+     * 返回 移动笔记的视图名
+     */
     @RequestMapping("/tomovenote.do")
     public String tomovenote(){
 	    return "toMoveNote";
     }
+    
+    /*
+     * 移动笔记至另一个笔记本
+     */
     @ResponseBody
     @RequestMapping("/movenote.do")
     public NoteResult moveNote(String note_id,String note_book_id){
 	    NoteResult<Note> result = ns.moveNote(note_id,note_book_id);
 	    return result;
     }
+    
+    /*
+     * 移动至回收站
+     */
     @ResponseBody
     @RequestMapping("/movetotrash.do")
     public NoteResult moveToTrush(String note_id){
     	NoteResult result = ns.moveToTrush(note_id);
     	return result;
+    }
+    
+    /*
+     * 加载模糊匹配的笔记记录
+     */
+    @ResponseBody
+    @RequestMapping("/searchnotes.do")
+    public NoteResult<List<Note>> searchNotes(String user_id,String note_title){
+    	NoteResult<List<Note>> notes = ns.searchNotes(user_id, note_title);
+    	return notes;
+    }
+    /*
+     * 加载回收站的所有记录
+     */
+    @ResponseBody
+    @RequestMapping("/loadtrash.do")
+    public NoteResult<List<Note>> loadTrash(String user_id){
+    	NoteResult<List<Note>> notes = ns.loadTrush(user_id);
+    	return notes;
+    }
+    /*
+     * 
+     */
+    @RequestMapping("/list")
+    public String loadNoteList(){
+    	return "list";
     }
 }

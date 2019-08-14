@@ -3,6 +3,7 @@ package dao;
 
 import java.util.List;
 
+import entity.Information;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -24,4 +25,7 @@ public interface NoteDao {
 	public List<Note> searchNotes(@Param("user_id") String user_id,
 								  @Param("note_title") String note_title);
 	public List<Note> trash(String user_id);
+	public List<Information> loadNotes(@Param("status") String status_id,
+                                       @Param("user_id") String user_id);
+
 }

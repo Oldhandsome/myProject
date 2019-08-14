@@ -7,20 +7,25 @@
  	 每个Mapper 接口对应一个配置文件  
   -->
 <mapper namespace="dao.NoteDao">
+    <!--加载 所属笔记本id为note_book_id  笔记状态为1或4的笔记-->
 	<select id="findByIds"
 		resultType="entity.Note">
 		select * from note where note_book_id=#{note_book_id} 
 			and note_status_id in(1,4)
 	</select>
+
+    <!--加载笔记内容 根据笔记的id-->
 	<select id="loadNoteContent" parameterType="String"
 		resultType="String">
 		select note_content from note where note_id = #{note_id}	
 	</select>
+    <!--更新笔记 note_content,note_title,updated_at，根据笔记的id-->
 	<update id="updateNote" parameterType="entity.Note">
 		update note set note_content = #{note_content} , note_title = #{note_title} ,
 					 	updated_at = UNIX_TIMESTAMP(#{updated_at})
 						where note_id = #{note_id}
 	</update>
+    <!--添加笔记-->
 	<insert id="addNote" parameterType="entity.Note">
 		insert into note(note_id , note_book_id , user_id ,
 							note_status_id , note_type_id , note_title ,
@@ -29,34 +34,52 @@
 							#{note_status_id} , #{note_type_id} , #{note_title} ,
 							UNIX_TIMESTAMP(#{created_at}) , #{note_content} )
 	</insert>
+    <!--删除笔记-->
 	<delete id="deleteNote" parameterType="String">
 		delete from note where note_id = #{note_id}
 	</delete>
+    <!--收藏笔记-->
 	<update id="starNote" parameterType="String">
 		update note set note_status_id = 4 where note_id = #{note_id}
 	</update>
+    <!--取消收藏笔记-->
 	<update id="unstarNote" parameterType="String">
 		update note set note_status_id = 1 where note_id = #{note_id}
 	</update>
+    <!--移动笔记-->
 	<update id="moveNote">
 		update note set note_book_id = #{note_book_id} , updated_at = #{updated_at}
 		where note_id = #{note_id}
 	</update>
+    <!--将笔记移动至回收站，即将笔记状态id改为2-->
 	<update id="moveToTrush" parameterType="String">
 		update note set note_status_id = 2 where note_id = #{note_id}
 	</update>
+
+    <!--搜索笔记，根据笔记的id返回笔记相关的信息-->
 	<select id="searchNotes" resultType="entity.Note">
 		select * from note where user_id = #{user_id} and note_title like #{note_title}	
 	</select>
+    <!--查看回收站的笔记，笔记状态为2-->
 	<select id="trash" parameterType="String" resultType="entity.Note">
 		select * from note where user_id = #{user_id} and note_status_id = 2;
 	</select>
-	<select id="loadNotes" resultMap="">
-		select note_id , note_title , note_status_id , note_type_id , 
-			   note.created_at , note.updated_at , note_book_name 
-				from note inner join note_book 
+    <!--加载笔记信息-->
+	<select id="loadNotes" resultMap="note_info">
+		select note_id , note_title , note_status_id , note_type_id ,
+			   note.created_at , note.updated_at , note_book_name
+				from note inner join note_book
 				on note.note_book_id = note_book.note_book_id
-				where note_status_id = #{note_status_id} and note.user_id = #{user_id}
+				where note_status_id = #{status} and note.user_id = #{user_id}
 	</select>
-	<resultMap type="" id="note_info"></resultMap>
+	<resultMap id="note_info" type="entity.Information">
+		<result property="id"  column="note_id"/>
+		<result property="name" column="note_title"/>
+		<result property="status" column="note_status_id"/>
+		<result property="type" column="note_type_id"/>
+        <result property="created_at" column="created_at"/>
+        <result property="updated_at" column="updated_at"/>
+		<result property="location" column="note_book_name"/>
+	</resultMap>
+
 </mapper>

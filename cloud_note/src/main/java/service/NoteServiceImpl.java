@@ -164,7 +164,7 @@ public class NoteServiceImpl implements NoteService{
 		return result;
 	}
 	@Override
-	public NoteResult<List<Note>> loadTrush(String user_id){
+	public NoteResult<List<Note>> loadTrushNote(String user_id){
 		NoteResult<List<Note>> result = new NoteResult<List<Note>>();
 		List<Note> notes = dao.trash(user_id);
 		if(notes.isEmpty()){

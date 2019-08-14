@@ -16,5 +16,5 @@ public interface NoteService {
 	public NoteResult moveNote(String note_id,String note_book_id);
 	public NoteResult moveToTrush(String note_id);
 	public NoteResult<List<Note>> searchNotes(String user_id,String note_title);
-	public NoteResult<List<Note>> loadTrush(String user_id);
+	public NoteResult<List<Note>> loadTrushNote(String user_id);
 }

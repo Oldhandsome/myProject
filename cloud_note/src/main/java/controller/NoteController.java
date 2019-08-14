@@ -160,7 +160,7 @@ public class NoteController {
     @ResponseBody
     @RequestMapping("/loadtrash.do")
     public NoteResult<List<Note>> loadTrash(String user_id){
-    	NoteResult<List<Note>> notes = ns.loadTrush(user_id);
+    	NoteResult<List<Note>> notes = ns.loadTrushNote(user_id);
     	return notes;
     }
     /*

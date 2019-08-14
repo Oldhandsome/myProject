@@ -36,9 +36,9 @@ public class Jtest {
 //		us = ac.getBean("userService",UserService.class);
 //		dao = ac.getBean("userDaoImpl",UserDao.class);
 //		noteBookDao = ac.getBean("noteBookDaoImpl",NoteBookDao.class);
-//		noteDao = ac.getBean("noteDaoImpl",NoteDao.class);
+		noteDao = ac.getBean("noteDaoImpl",NoteDao.class);
 //		nbs = ac.getBean("noteBookServiceImpl",NoteBookService.class);
-		ns = ac.getBean("noteServiceImpl",NoteService.class);
+//		ns = ac.getBean("noteServiceImpl",NoteService.class);
 		
 	}
 	@Test
@@ -228,4 +228,9 @@ public class Jtest {
 			System.out.println(note);
 		}
 	}
+	@Test
+	public void test25(){
+		noteDao.loadNotes()
+	}
+
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import entity.Information;
 import org.apache.ibatis.javassist.expr.NewArray;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,11 @@ public class NoteServiceImpl implements NoteService{
 	@Resource(name="noteDaoImpl")
 	private NoteDao dao;
 
+	/**
+	 * 加载笔记本中的笔记
+	 * @param note_book_id
+	 * @return
+	 */
 	public NoteResult<List<Note>> loadBookNotes(String note_book_id){
 		List<Note> notes = dao.findByIds(note_book_id);
 		NoteResult<List<Note>> result = new NoteResult<List<Note>>();
@@ -37,6 +43,12 @@ public class NoteServiceImpl implements NoteService{
 		result.setStatus(0);
 		return result;
 	}
+
+	/**
+	 * 加载笔记的内容
+	 * @param note_id
+	 * @return
+	 */
 	@Override
 	public NoteResult<String> loadNoteContent(String note_id) {
 		NoteResult<String> result = new NoteResult<String>();
@@ -46,6 +58,14 @@ public class NoteServiceImpl implements NoteService{
 		result.setData(content);
 		return result;
 	}
+
+	/**
+	 * 更新笔记的内容，标题
+	 * @param note_id
+	 * @param note_title
+	 * @param note_content
+	 * @return
+	 */
 	@Override
 	public NoteResult<String> updateNote(String note_id, String note_title,String note_content) {
 		NoteResult<String> result = new NoteResult<String>();
@@ -59,6 +79,12 @@ public class NoteServiceImpl implements NoteService{
 		result.setMsg("更新成功");
 		return result;
 	}
+
+	/**
+	 * 添加一个笔记
+	 * @param note
+	 * @return
+	 */
 	@Override
 	public NoteResult<Note> addNote(Note note) {
 		NoteResult<Note> result = new NoteResult<Note>();
@@ -75,6 +101,11 @@ public class NoteServiceImpl implements NoteService{
 		return result;
 	}
 
+	/**
+	 * 删除一个笔记
+	 * @param note_id
+	 * @return
+	 */
 	@Override
 	public NoteResult deleteNote(String note_id) {
 		NoteResult<String> result = new NoteResult<String>();
@@ -90,6 +121,11 @@ public class NoteServiceImpl implements NoteService{
 		return result;
 	}
 
+	/**
+	 * 收藏一个笔记
+	 * @param note_id
+	 * @return
+	 */
 	@Override
 	public NoteResult starNote(String note_id) {
 		NoteResult result = new NoteResult();
@@ -105,6 +141,11 @@ public class NoteServiceImpl implements NoteService{
 		return result;
 	}
 
+	/**
+	 * 取消收藏一个笔记
+	 * @param note_id
+	 * @return
+	 */
 	@Override
 	public NoteResult unstartNote(String note_id) {
 		NoteResult result = new NoteResult();
@@ -119,6 +160,12 @@ public class NoteServiceImpl implements NoteService{
 		return result;
 	}
 
+	/**
+	 * 移动笔记至另一个笔记本
+	 * @param note_id
+	 * @param note_book_id
+	 * @return
+	 */
 	@Override
 	public NoteResult moveNote(String note_id, String note_book_id) {
 		NoteResult<Note> result = new NoteResult<Note>();
@@ -133,6 +180,12 @@ public class NoteServiceImpl implements NoteService{
 		}
 		return result;
 	}
+
+	/**
+	 * 将笔记放入回收站
+	 * @param note_id
+	 * @return
+	 */
 	@Override
 	public NoteResult moveToTrush(String note_id){
 		NoteResult result = new NoteResult();
@@ -148,11 +201,18 @@ public class NoteServiceImpl implements NoteService{
 		}
 		return result;
 	}
+
+	/**
+	 * 搜索笔记（名字的模糊查询）
+	 * @param user_id
+	 * @param note_title
+	 * @return
+	 */
 	@Override
-	public NoteResult<List<Note>> searchNotes(String user_id, String note_title) {
+	public NoteResult<List<Information>> searchNotes(String user_id, String note_title) {
 		note_title = String.format("%%%s%%", note_title);
-		List<Note> notes = dao.searchNotes(user_id, note_title);
-		NoteResult<List<Note>> result = new NoteResult<List<Note>>();
+		List<Information> notes = dao.searchNotes(user_id, note_title);
+		NoteResult<List<Information>> result = new NoteResult<List<Information>>();
 		if (notes.isEmpty()) {
 			result.setStatus(1);
 			result.setMsg("模糊查询失败");
@@ -163,10 +223,16 @@ public class NoteServiceImpl implements NoteService{
 		}
 		return result;
 	}
+
+	/**
+	 * 加载回收站的笔记
+	 * @param user_id
+	 * @return
+	 */
 	@Override
-	public NoteResult<List<Note>> loadTrushNote(String user_id){
-		NoteResult<List<Note>> result = new NoteResult<List<Note>>();
-		List<Note> notes = dao.trash(user_id);
+	public NoteResult<List<Information>> loadTrushNote(String user_id){
+		NoteResult<List<Information>> result = new NoteResult<List<Information>>();
+		List<Information> notes = dao.trash(user_id);
 		if(notes.isEmpty()){
 			result.setStatus(1);
 			result.setMsg("查询记录数目为0");

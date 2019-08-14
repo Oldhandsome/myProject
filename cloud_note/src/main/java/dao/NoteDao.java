@@ -22,9 +22,9 @@ public interface NoteDao {
 						@Param("note_book_id") String note_book_id,
 						@Param("updated_at") long updated_at);
 	public int moveToTrush(String note_id);
-	public List<Note> searchNotes(@Param("user_id") String user_id,
+	public List<Information> searchNotes(@Param("user_id") String user_id,
 								  @Param("note_title") String note_title);
-	public List<Note> trash(String user_id);
+	public List<Information> trash(String user_id);
 	public List<Information> loadNotes(@Param("status") String status_id,
                                        @Param("user_id") String user_id);
 

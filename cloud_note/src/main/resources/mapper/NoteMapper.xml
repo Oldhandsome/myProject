@@ -56,13 +56,23 @@
 		update note set note_status_id = 2 where note_id = #{note_id}
 	</update>
 
-    <!--搜索笔记，根据笔记的id返回笔记相关的信息-->
-	<select id="searchNotes" resultType="entity.Note">
-		select * from note where user_id = #{user_id} and note_title like #{note_title}	
+
+
+    <!--搜索笔记，根据笔记的title返回笔记相关的信息-->
+	<select id="searchNotes" resultMap="note_info">
+		select note_id , note_title , note_type_id , note_status_id ,
+				note.created_at , note.updated_at , note_book_name
+				from note inner join note_book
+				on note.note_book_id = note_book.note_book_id
+				where note.user_id= #{user_id} and note_title like #{note_title} and note_status_id in (1,2,4);
 	</select>
-    <!--查看回收站的笔记，笔记状态为2-->
-	<select id="trash" parameterType="String" resultType="entity.Note">
-		select * from note where user_id = #{user_id} and note_status_id = 2;
+    <!--查看回收站的笔记信息，笔记状态为2-->
+	<select id="trash" resultMap="note_info">
+		select note_id , note_title , note_type_id , note_status_id ,
+				note.created_at , note.updated_at , note_book_name
+				from note inner join note_book
+				on note.note_book_id = note_book.note_book_id
+				where note.user_id = #{user_id} and note_status_id = 2;
 	</select>
     <!--加载笔记信息-->
 	<select id="loadNotes" resultMap="note_info">
@@ -81,5 +91,4 @@
         <result property="updated_at" column="updated_at"/>
 		<result property="location" column="note_book_name"/>
 	</resultMap>
-
 </mapper>

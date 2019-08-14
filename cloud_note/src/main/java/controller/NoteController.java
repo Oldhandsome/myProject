@@ -148,26 +148,22 @@ public class NoteController {
     /*
      * 加载模糊匹配的笔记记录
      */
-    @ResponseBody
+    /*@ResponseBody
     @RequestMapping("/searchnotes.do")
     public NoteResult<List<Note>> searchNotes(String user_id,String note_title){
-    	NoteResult<List<Note>> notes = ns.searchNotes(user_id, note_title);
-    	return notes;
     }
-    /*
+    *//*
      * 加载回收站的所有记录
-     */
+     *//*
     @ResponseBody
     @RequestMapping("/loadtrash.do")
     public NoteResult<List<Note>> loadTrash(String user_id){
-    	NoteResult<List<Note>> notes = ns.loadTrushNote(user_id);
-    	return notes;
     }
-    /*
-     * 
-     */
+    *//*
+     * return the view of the url
+     *//*
     @RequestMapping("/list")
     public String loadNoteList(){
     	return "list";
-    }
+    }*/
 }

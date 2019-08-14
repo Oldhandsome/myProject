@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import entity.Information;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -148,22 +149,26 @@ public class NoteController {
     /*
      * 加载模糊匹配的笔记记录
      */
-    /*@ResponseBody
+    @ResponseBody
     @RequestMapping("/searchnotes.do")
-    public NoteResult<List<Note>> searchNotes(String user_id,String note_title){
+    public NoteResult<List<Information>> searchNotes(String user_id, String note_title){
+    	NoteResult<List<Information>> result = ns.searchNotes(user_id,note_title);
+    	return result;
     }
-    *//*
+    /*
      * 加载回收站的所有记录
-     *//*
+     */
     @ResponseBody
     @RequestMapping("/loadtrash.do")
-    public NoteResult<List<Note>> loadTrash(String user_id){
+    public NoteResult<List<Information>> loadTrash(String user_id){
+    	NoteResult<List<Information>> result = ns.loadTrushNote(user_id);
+    	return result;
     }
-    *//*
+    /*
      * return the view of the url
-     *//*
-    @RequestMapping("/list")
+     */
+    @RequestMapping("/list.do")
     public String loadNoteList(){
     	return "list";
-    }*/
+    }
 }

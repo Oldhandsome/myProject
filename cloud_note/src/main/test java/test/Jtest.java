@@ -36,9 +36,9 @@ public class Jtest {
 //		us = ac.getBean("userService",UserService.class);
 //		dao = ac.getBean("userDaoImpl",UserDao.class);
 //		noteBookDao = ac.getBean("noteBookDaoImpl",NoteBookDao.class);
-		noteDao = ac.getBean("noteDaoImpl",NoteDao.class);
+//		noteDao = ac.getBean("noteDaoImpl",NoteDao.class);
 //		nbs = ac.getBean("noteBookServiceImpl",NoteBookService.class);
-//		ns = ac.getBean("noteServiceImpl",NoteService.class);
+		ns = ac.getBean("noteServiceImpl",NoteService.class);
 	}
 	@Test
 	public void test() {
@@ -202,9 +202,37 @@ public class Jtest {
 	}
 	@Test
 	public void test25(){
-        List<Information> list = noteDao.loadNotes("1","79519");
-        for(Information info:list){
-            System.out.println(info);
-        }
+		List<Information> list = noteDao.loadNotes("1","79519");
+		for(Information info:list){
+			System.out.println(info);
+		}
+	}
+	@Test
+	public void test26(){
+		List<Information> list = noteDao.trash("79519");
+		for(Information info:list){
+			System.out.println(info);
+		}
+	}
+	@Test
+	public void test27(){
+		List<Information> list = noteDao.searchNotes("79519","%笔记%");
+		for(Information info:list){
+			System.out.println(info);
+		}
+	}
+	@Test
+	public void test28(){
+		NoteResult<List<Information>> list = ns.loadTrushNote("79519");
+		for(Information info:list.getData()){
+			System.out.println(info);
+		}
+	}
+	@Test
+	public void test29(){
+		NoteResult<List<Information>> list = ns.searchNotes("79519","笔记");
+		for(Information info:list.getData()){
+			System.out.println(info);
+		}
 	}
 }

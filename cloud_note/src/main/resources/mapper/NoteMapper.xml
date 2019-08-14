@@ -64,7 +64,7 @@
 				note.created_at , note.updated_at , note_book_name
 				from note inner join note_book
 				on note.note_book_id = note_book.note_book_id
-				where note.user_id= #{user_id} and note_title like #{note_title} and note_status_id in (1,2,4);
+				where note.user_id= #{user_id} and note_title like #{note_title} and note_status_id in (1,2,4) ;
 	</select>
     <!--查看回收站的笔记信息，笔记状态为2-->
 	<select id="trash" resultMap="note_info">

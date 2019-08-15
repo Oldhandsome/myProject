@@ -67,7 +67,7 @@ public class NoteController {
 		NoteResult<String> result = ns.updateNote(note_id, note_title,note_content);
 		return result;
 	}
-	
+
 	/*
 	 * 返回添加笔记视图
 	 */
@@ -98,6 +98,13 @@ public class NoteController {
 		return result;
 	}
 
+	@ResponseBody
+	@RequestMapping("/deletenote.do")
+	public NoteResult deleteNote(String note_id){
+		NoteResult result = new NoteResult();
+		result =  ns.deleteNote(note_id);
+		return result;
+	}
 	/*
 	 * 收藏笔记
 	 */

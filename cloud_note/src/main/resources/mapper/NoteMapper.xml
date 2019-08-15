@@ -64,7 +64,8 @@
 				note.created_at , note.updated_at , note_book_name
 				from note inner join note_book
 				on note.note_book_id = note_book.note_book_id
-				where note.user_id= #{user_id} and note_title like #{note_title} and note_status_id in (1,2,4) ;
+				where note.user_id= #{user_id} and note_title like #{note_title} and note_status_id in (1,2,4)
+				ORDER BY note_title DESC
 	</select>
     <!--查看回收站的笔记信息，笔记状态为2-->
 	<select id="trash" resultMap="note_info">
@@ -72,7 +73,8 @@
 				note.created_at , note.updated_at , note_book_name
 				from note inner join note_book
 				on note.note_book_id = note_book.note_book_id
-				where note.user_id = #{user_id} and note_status_id = 2;
+				where note.user_id = #{user_id} and note_status_id = 2
+				ORDER BY note_title DESC
 	</select>
 	<resultMap id="note_info" type="entity.Information">
 		<result property="id"  column="note_id"/>
@@ -90,5 +92,6 @@
 				from note inner join note_book
 				on note.note_book_id = note_book.note_book_id
 				where note_status_id = #{status} and note.user_id = #{user_id}
+				ORDER BY note_title DESC
 	</select>
 </mapper>

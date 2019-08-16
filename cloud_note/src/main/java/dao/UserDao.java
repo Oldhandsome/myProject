@@ -2,6 +2,7 @@ package dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import entity.User;
@@ -15,4 +16,5 @@ public interface UserDao {
 	public void insert(User user);
 	public void update(User user);
 	public void delete(String id);
+	public int changePwd(@Param("user_id") String user_id, @Param("pwd") String pwd);
 }

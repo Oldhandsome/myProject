@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService{
 	
 	@Resource(name="userDaoImpl")
 	private UserDao dao;
-	
+
 	@Override
 	public NoteResult<User> checkLogin(String id, String password) {
 		NoteResult<User> result = new NoteResult<User>();
@@ -41,6 +41,32 @@ public class UserServiceImpl implements UserService{
 		return result;
 	}
 
+	@Override
+	public NoteResult checkPwd(String user_id,String pwd){
+		NoteResult result = new NoteResult();
+		User user = dao.findById(user_id);
+		if(!NoteUtil.md5(pwd).equals(user.getPassword())){
+			result.setStatus(1);
+			result.setMsg("密码错误");
+		}else{
+			result.setStatus(0);
+			result.setMsg("密码正确");
+		}
+		return result;
+	}
+	public NoteResult changePwd(String user_id,String password){
+		NoteResult result = new NoteResult();
+		int rows = dao.changePwd(user_id,password);
+		if(rows == 1){
+			result.setStatus(0);
+			result.setMsg("修改成功");
+		}
+		else{
+			result.setStatus(1);
+			result.setMsg("修改出现错误");
+		}
+		return result;
+	}
 	@Override
 	public NoteResult<String> register(User user) {
 		NoteResult<String> result = new NoteResult<String>();

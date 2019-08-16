@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import entity.User;
 import service.UserService;
 import util.NoteResult;
+import util.NoteUtil;
 
 @Controller
 @RequestMapping("/user")
@@ -39,6 +40,19 @@ public class UserController {
 	public String toindex(){
 		return "index";
 	}
+
+	@ResponseBody
+	@RequestMapping("/checkpwd.do")
+	public NoteResult checkPWD(String user_id,String pwd){
+		NoteResult result = us.checkPwd(user_id, pwd);
+		return result;
+	}
+	@ResponseBody
+    @RequestMapping("/changepwd.do")
+    public NoteResult changePwd(String user_id,String password){
+	    NoteResult result = us.changePwd(user_id, NoteUtil.md5(password));
+	    return result;
+    }
 	@ResponseBody
 	@RequestMapping("/login.do")
 	public NoteResult<User> login(User user,HttpServletRequest req,HttpServletResponse res) {

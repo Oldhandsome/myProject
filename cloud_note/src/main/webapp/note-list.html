@@ -22,61 +22,8 @@
 <title>资讯列表</title>
 </head>
 <body>
-<nav class="breadcrumb">
-	<i class="Hui-iconfont">&#xe67f;</i> 首页
-	<span class="c-gray en">&gt;</span> 资讯管理
-	<span class="c-gray en">&gt;</span> 资讯列表
-</nav>
-<div class="page-container">
-	<div class="text-c">
-	 <span class="select-box inline">
-		<input type="text" name="searchInput" id="searchInput" placeholder=" 笔记名称" style="width:250px" class="input-text">
-		<button name="searchBtn" id="searchBtn" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜资讯</button>
-		 </span>
-	</div>
-	<div class="cl pd-5 bg-1 bk-gray mt-20">
-		<span class="l">
-			<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
-			<i class="Hui-iconfont">&#xe6e2;</i>
-				批量回收
-			</a>
-		</span>
-		<span class="r">共有数据：<strong></strong> 条
-		</span>
-	</div>
-	<div class="mt-20">
-		<table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
-			<thead>
-				<tr class="text-c">
-					<th width="25"><input id="box"type="checkbox" name="" value="" ></th>
-					<th width="80" >笔记标题</th>
-					<th width="80" >笔记本</th>
-					<th width="80" id="note_status_id">状态</th>
-					<th width="80" id="note_type_id">类型</th>
-					<th width="120" id="created_at">创建时间</th>
-					<th width="120" id="updated_at">更新时间</th>
-					<th width="120">操作</th>
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-		</table>
-		<span class="l">
-			<a href="javascript:;" onclick="last_page();" class="btn btn-danger radius">
-			<i class="Hui-iconfont">&#xe678;</i>
-				上一页
-			</a>
-		</span>
-        <span id="index" class="l">
-        </span>
-		<span class="r">
-			<a class="btn btn-primary radius" data-href="article-add.html" onclick="next_page();" href="javascript:;">
-				下一页
-				<i class="Hui-iconfont">&#xe67a;</i>
-			</a>
-		</span>
-	</div>
-</div>
+
+</body>
 <!--_footer 作为公共模版分离出去-->
 <script type="text/javascript" src="../lib/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
@@ -89,223 +36,50 @@
 <script type="text/javascript" src="../lib/laypage/1.2/laypage.js"></script>
 <script type="text/javascript" src="../lib/base.js"></script>
 <script type="text/javascript">
-$("#searchBtn").click(function(){
-		var note_name = $('#searchInput').val().trim();
-		if(note_name == ""){
-			parent.layer.msg("请输入需要模糊查询笔记",{icon:0,time:1000});
-		}else{
-			$.ajax({
-				url:path+"/note/searchnotes.do",
-				data:{"user_id":$.cookie("user_id"),"note_title":note_name},
-				type:"post",
-				dataType:"json",
-				success:function(result){
-				    var infos = result.data;
-				    sessionStorage.clear();
-					if(result.status == 0){
-                        for(var i = 0; i < infos.length;){
-                            var str = "";
-                            for(var j = 0;j < 5 ;j++){
-                                var info = infos[i];
-                                var tr = createTr(info);
-                                str += tr;
-                                i++;
-                                if(i >= infos.length)
-                                    break;
-                            }
-                            sessionStorage.setItem((Math.ceil(i/5)).toString(),str);
-                        }
-                        $("tbody").first().empty();
-                        $("tbody").first().append(sessionStorage.getItem("1"));
-                        $("#index").text("1");
-                        $("strong").first().text(infos.length);
-					}else{
-						parent.layer.msg(result.msg,{icon:0,time:1000});
-					}
-				},
-				error:function(){
-					parent.layer.msg("模糊查询错误",{icon:0,time:1000});
-				}
-			});
-		}
-});
-function createTr(information){
-    var sta = "";
-    var type = "";
-    if(information.status == 1)
-        sta = "正常";
-    else if(information.status == 2)
-        sta = "回收站";
-    else if(information.status == 4)
-        sta = "收藏";
-    if(information.type == 1)
-        type = "笔记";
-    else if(information.type == 0)
-        type = "笔记本"
-	var str = `
-		<tr class="text-c" id="${information.id}">
-			<td><input type="checkbox" value="" name=""></td>
-			<td id="name">
-				<u style="cursor:pointer" class="text-primary" onClick="note_content(this)" title="查看">
-				${information.name}
-				</u>
-			</td>
-			<td id="location">${information.location}</td>
-			<td id="status">${sta}</td>
-			<td id="type">${type}</td>
-			<td id="updated_at">${getSmpFormatDateByLong(information.updated_at,true)}</td>
-			<td id="created_at">${getSmpFormatDateByLong(information.created_at,true)}</td>
-			<td class="f-14 td-manage">
-				<a style="text-decoration:none" class="ml-5" onClick="note_edit('资讯编辑','article-add.html','10001')" href="javascript:;" title="编辑">
-					<i class="Hui-iconfont">&#xe6df;</i>
-				</a>
-				<a style="text-decoration:none" class="ml-5" onClick="note_del(this)" href="javascript:;" title="回收">
-					<i class="Hui-iconfont">&#xe6a1;</i>
-				</a>
-				<a style="text-decoration:none" class="ml-5" onClick="note_remove(this)" href="javascript:;" title="删除">
-					<i class="Hui-iconfont">&#xe6e2;</i>
-				</a>
-			</td>
-		</tr>
-	`;
-	return str;
-};
-
-/*资讯-内容*/
-function note_content(obj){
-    var u = $(obj);
-    var cont ;
-    $.ajax({
-        url:path+"/note/loadNoteContent.do",
-        data:{"note_id":u.parents("tr").attr("id")},
-        type:"post",
-        dataType:"json",
-        success:function(result){
-            if(result.status == 0)
-                parent.layer.open({
-                    type: 1,
-                    skin: 'layui-layer-rim', //加上边框
-                    area: ['420px', '240px'], //宽高
-                    title:"笔记内容",
-                    content: result.data
-                });
-            else
-                layer.msg("加载内容失败",{icon:0,time:1000});
-        },
-        error:function(){
-            layer.msg("加载内容失败",{icon:0,time:1000});
+    function datadel(){
+        var array = new Array();
+        for(var i = 0; i < $("tbody").children().length; i++){
+            if($("tbody").children("tr").eq(i).children("td").children("input").first().is(':checked') == true){
+                console.log("true");
+                console.log($("tbody").children("tr").attr("id"));
+                array[i] = $("tbody").children("tr").attr("id");
+            }
         }
-    });
-};
-
-function note_remove(obj){
-    var a = $(obj);
-    parent.layer.confirm('确认要删除么？',
-        {btn:["确定"]},
-        function(){
+        if(array.length == 0)
+            parent.layer.msg("选中的记录数目为0！",{icon:0,time:1000});
+        else{
             $.ajax({
-                url:path+"/note/deletenote.do",
+                url:"",
                 type:"post",
-                data:{"note_id":a.parents("tr").attr("id")},
+                data:{"notes_ids":JSON.stringify(array)},
                 dataType:"json",
                 success:function(result){
-                    if(result.status == 0){
-                        window.sessionStorage.getItem($("#index").text());
-                        a.parents("tr").remove();
-                        window.sessionStorage.setItem($("#index").text(),$("tbody").first().html())
-                        parent.layer.msg(result.msg,{icon:1,time:1000});
-                    }
-                    else
-                        parent.layer.msg(result.msg,{icon:0,time:1000});
+
                 },
                 error:function(){
-                    parent.layer.msg("删除错误",{icon:0,time:1000});
+                    parent.layer.msg("批量删除错误",{icon:0,time:1000});
                 }
             });
+        }
+    };
+    /*资讯-下架*/
+    function article_stop(obj,id){
+        layer.confirm('确认要下架吗？',function(index){
+            $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="article_start(this,id)" href="javascript:;" title="发布"><i class="Hui-iconfont">&#xe603;</i></a>');
+            $(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已下架</span>');
+            $(obj).remove();
+            layer.msg('已下架!',{icon: 5,time:1000});
         });
-};
-/*资讯-删除*/
-function note_del(obj){
-    var a = $(obj);
-	parent.layer.confirm('确认要放入回收站么？',
-        {btn:["确定"]},
-        function(){
-            $.ajax({
-                url:path+"/note/movetotrash.do",
-                type:"post",
-                data:{"note_id":a.parents("tr").attr("id")},
-                dataType:"json",
-                success:function(result){
-                   if(result.status == 0){
-                       window.sessionStorage.getItem($("#index").text());
-                       /*a.parents("tr").remove();*/
-                       a.parent().siblings("td").eq(3).text("回收站");
-                       window.sessionStorage.setItem($("#index").text(),$("tbody").first().html())
-                       parent.layer.msg("已放入回收站!",{icon:1,time:1000});
-                   }
-                   else
-                       parent.layer.msg("回收错误！",{icon:0,time:1000});
-                },
-                error:function(){
-                    parent.layer.msg("回收错误！",{icon:0,time:1000});
-                }
-            });
-	    });
-};
-function next_page(){
-    var currentPage = parseInt($("#index").text());
-    if(currentPage == sessionStorage.length)
-        parent.layer.msg("已经是最后一页了");
-    else{
-        $("#box").prop("checked",false);
-        var nextPage = (currentPage+1).toString();
-        $("tbody").first().empty();
-        $("tbody").first().append(sessionStorage.getItem(nextPage));
-        $("#index").text(nextPage);
     }
-};
-function last_page(){
-    var currentPage = parseInt($("#index").text());
-    if(currentPage == 1)
-        parent.layer.msg("已经是第一页了");
-    else{
-        $("#box").prop("checked",false);
-        var lastPage = (currentPage-1).toString();
-        $("tbody").first().empty();
-        $("tbody").first().append(sessionStorage.getItem(lastPage));
-        $("#index").text(lastPage);
 
+    /*资讯-发布*/
+    function article_start(obj,id){
+        layer.confirm('确认要发布吗？',function(index){
+            $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="article_stop(this,id)" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe6de;</i></a>');
+            $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已发布</span>');
+            $(obj).remove();
+            layer.msg('已发布!',{icon: 6,time:1000});
+        });
     }
-};
-function datadel(){
-    console.log($("tbody").children().length);
-    for(var i = 0; i < $("tbody").children().length; i++){
-        console.log(i);
-        console.log($("tbody").children("tr").eq(i).children("td").children("input").first().html());
-        if($("tbody").children("tr").eq(i).children("td").children("input").first().is(':checked') == true){
-            console.log("true");
-        }
-    }
-};
-/*资讯-下架*/
-function article_stop(obj,id){
-	layer.confirm('确认要下架吗？',function(index){
-		$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="article_start(this,id)" href="javascript:;" title="发布"><i class="Hui-iconfont">&#xe603;</i></a>');
-		$(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已下架</span>');
-		$(obj).remove();
-		layer.msg('已下架!',{icon: 5,time:1000});
-	});
-}
-
-/*资讯-发布*/
-function article_start(obj,id){
-	layer.confirm('确认要发布吗？',function(index){
-		$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="article_stop(this,id)" href="javascript:;" title="下架"><i class="Hui-iconfont">&#xe6de;</i></a>');
-		$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已发布</span>');
-		$(obj).remove();
-		layer.msg('已发布!',{icon: 6,time:1000});
-	});
-}
 </script>
-</body>
 </html>

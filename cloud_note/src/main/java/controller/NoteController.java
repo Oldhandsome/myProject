@@ -171,6 +171,12 @@ public class NoteController {
     	NoteResult<List<Information>> result = ns.loadTrushNote(user_id);
     	return result;
     }
+	@ResponseBody
+	@RequestMapping("/trashrecover.do")
+	public NoteResult trashRecover(String note_id){
+		NoteResult result = ns.trashRecover(note_id);
+		return result;
+	}
     /*
      * return the view of the url
      */

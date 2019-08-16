@@ -33,4 +33,7 @@
 		insert into user values(#{user_id},#{user_name},#{password},
 			#{authoritative_code},#{explaination})
 	</insert>
+	<update id="changePwd">
+		update user set password = #{pwd} where user_id = #{user_id}
+	</update>
 </mapper>

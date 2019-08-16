@@ -93,7 +93,7 @@ $("#moveBtn").click(function(){
                     parent.layer.msg("移动笔记成功",{icon:1,time:1000});
                     var deleli = 'a[id='+note_id+']';
         	        var $li = $(deleli,parent.document).parent();
-        	        $li.children('ul#second').slideUp();
+        	        // $li.children('ul#second').slideUp();
         	        $li.remove();
         	        var moveli = "dl[data-bookId="+note_book_id+"]";
         	        $(moveli,parent.document).find("ul#first").append($li);

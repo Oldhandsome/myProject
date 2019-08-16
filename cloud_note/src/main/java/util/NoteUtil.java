@@ -28,6 +28,7 @@ public class NoteUtil {
 	}
 	public static void main(String[] args) {
 		System.out.println(NoteUtil.md5("11111111"));
+		System.out.println(NoteUtil.md5("123456"));
 		System.out.println(NoteUtil.createId());
 		System.out.println(new Date().getTime());
 	}

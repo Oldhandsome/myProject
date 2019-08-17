@@ -244,4 +244,17 @@ public class NoteServiceImpl implements NoteService{
 		}
 		return result;
 	}
+	@Override
+	public NoteResult trashRecover(String note_id) {
+		int rows = dao.trashRecover(note_id);
+		NoteResult result = new NoteResult();
+		if(rows == 1){
+			result.setStatus(0);
+			result.setMsg("恢复成功");
+		}else{
+			result.setStatus(1);
+			result.setMsg("恢复失败");
+		}
+		return result;
+	}
 }

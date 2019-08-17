@@ -25,6 +25,7 @@ public interface NoteDao {
 	public List<Information> searchNotes(@Param("user_id") String user_id,
 								  @Param("note_title") String note_title);
 	public List<Information> trash(String user_id);
+	public int trashRecover(String note_id);
 	public List<Information> loadNotes(@Param("status") String status_id,
                                        @Param("user_id") String user_id);
 

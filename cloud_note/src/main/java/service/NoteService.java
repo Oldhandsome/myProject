@@ -18,4 +18,5 @@ public interface NoteService {
 	public NoteResult moveToTrush(String note_id);
 	public NoteResult<List<Information>> searchNotes(String user_id,String note_title);
 	public NoteResult<List<Information>> loadTrushNote(String user_id);
+	public NoteResult trashRecover(String note_id);
 }

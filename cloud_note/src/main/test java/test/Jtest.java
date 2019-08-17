@@ -33,12 +33,12 @@ public class Jtest {
 	@Before
 	public void init() {
 		ac = new ClassPathXmlApplicationContext("conf/spring-mybatis.xml");
-//		us = ac.getBean("userService",UserService.class);
+		us = ac.getBean("userServiceImpl",UserService.class);
 //		dao = ac.getBean("userDaoImpl",UserDao.class);
 //		noteBookDao = ac.getBean("noteBookDaoImpl",NoteBookDao.class);
 //		noteDao = ac.getBean("noteDaoImpl",NoteDao.class);
 //		nbs = ac.getBean("noteBookServiceImpl",NoteBookService.class);
-		ns = ac.getBean("noteServiceImpl",NoteService.class);
+//		ns = ac.getBean("noteServiceImpl",NoteService.class);
 	}
 	@Test
 	public void test() {
@@ -234,5 +234,27 @@ public class Jtest {
 		for(Information info:list.getData()){
 			System.out.println(info);
 		}
+	}
+	@Test
+	public void test30(){
+		int rows = noteDao.trashRecover("072383e4-54fd-4cad-bdad-c87632996be4");
+		System.out.println(rows);
+	}
+	@Test
+	public void test31(){
+		NoteResult result = ns.trashRecover("072383e4-54fd-4cad-bdad-c87632996be4");
+		System.out.println(result);
+	}
+	@Test
+	public void test32(){
+		System.out.println(us.checkPwd("79519", "123456"));
+	}
+	@Test
+	public void test33(){
+		System.out.println(us.changePwd("79519", NoteUtil.md5("123456")));
+	}
+	@Test
+	public void test34(){
+		System.out.println();
 	}
 }

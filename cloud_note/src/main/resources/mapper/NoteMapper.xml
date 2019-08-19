@@ -21,7 +21,8 @@
 	</select>
     <!--更新笔记 note_content,note_title,updated_at，根据笔记的id-->
 	<update id="updateNote" parameterType="entity.Note">
-		update note set note_content = #{note_content} , note_title = #{note_title} ,
+		update note 
+			set note_content = #{note_content} , note_title = #{note_title} ,
 					 	updated_at = UNIX_TIMESTAMP(#{updated_at})
 						where note_id = #{note_id}
 	</update>

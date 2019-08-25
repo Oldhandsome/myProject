@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="entity.NoteBook" table="note_book" schema="cloudnote">
+        <id name="noteBookId" column="note_book_id"/>
+        <property name="noteBookName" column="note_book_name"/>
+        <property name="explaination" column="explaination"/>
+        <property name="createdAt" column="created_at"/>
+        <property name="updatedAt" column="updated_at"/>
+    </class>
+</hibernate-mapping>

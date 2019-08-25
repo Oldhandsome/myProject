@@ -97,4 +97,54 @@
 				where note_status_id = #{status} and note.user_id = #{user_id}
 				ORDER BY note_title DESC
 	</select>
+
+	<update id="deleteNotes" parameterType="java.util.Map">
+		update note set note_status_id= '3'
+		 	, updated_at =
+			<choose>
+				<when test="updated_at != null">
+					#{updated_at}
+				</when>
+				<when test="updated_at == null">
+					unix_timestamp()
+				</when>
+			</choose>
+			 where note_id in
+			<foreach  collection="ids" item="id"
+				open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+	<update id="moveNotesToTrush" parameterType="java.util.Map">
+		update note set note_status_id = "2" , updated_at =
+			<choose>
+				<when test="updated_at != null">
+					#{updated_at}
+				</when>
+				<when test="updated_at == null">
+					unix_stamp()
+				</when>
+			</choose>
+			where note_id in
+			<foreach collection="ids" item="id"
+					 open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
+	<update id="trashNotesRecover" parameterType="java.util.Map">
+		update note set note_status_id = "1" ,updated_at =
+			<choose>
+				<when test="updated_at != null">
+					#{updated_at}
+				</when>
+				<when test="updated_at == null">
+					unix_timestamp()
+				</when>
+			</choose>
+			where note_id in
+			<foreach collection="ids" item="id"
+					 open="(" separator="," close=")">
+				#{id}
+			</foreach>
+	</update>
 </mapper>

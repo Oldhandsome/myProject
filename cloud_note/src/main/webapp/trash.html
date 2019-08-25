@@ -4,10 +4,9 @@
     <span class="c-gray en">&gt;</span> 回收站
 </nav>
 <div class="page-container">
-
     <div class="cl pd-5 bg-1 bk-gray mt-20">
 		<span class="l">
-			<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
+			<a href="javascript:;" onclick="trashnotesrecovery()" class="btn btn-danger radius">
 			<i class="Hui-iconfont">&#xe6e2;</i>
 				批量还原
 			</a>
@@ -25,7 +24,7 @@
         <table class="table table-border table-bordered table-bg table-hover table-sort table-responsive">
             <thead>
             <tr class="text-c">
-                <th width="25"><input id="box"type="checkbox" name="" value="" ></th>
+                <th width="25"><input id="box" onclick="chooseAll(this)" type="checkbox" name="" value="" ></th>
                 <th width="80" >笔记标题</th>
                 <th width="80" >笔记本</th>
                 <th width="80" id="note_status_id">状态</th>
@@ -54,9 +53,3 @@
 		</span>
     </div>
 </div>
-
-<script type="text/javascript">
-    $(document).ready(function(){
-
-    });
-</script>

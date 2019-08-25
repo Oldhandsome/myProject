@@ -120,64 +120,8 @@
 <script type="text/javascript">
 $(function(){
 	var ue = UE.getEditor('editor');
+	loadUserBooks();
 });
-
-</script>
-<script type="text/javascript">
-	$(function(){
-		loadUserBooks();
-		//createDl("5b5f8989-bde0-40d4-8ef5-9b04379f9d06","chinese");
-	});
-    function trash(title,url){
-        var index = layer.open({
-            type: 2,
-            title: title,
-            content: path+url,
-            success: function (layero, index) {
-                var body = layer.getChildFrame('body', index);
-                body.load(path+"/trash.html");
-                // var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
-                var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
-                loadtrash(body);
-            }
-        });
-        layer.full(index);
-    };
-    function note_search(title,url){
-		var index = layer.open({
-			type: 2,
-			title: title,
-			content: path+url,
-			success: function (layero, index) {
-				var body = layer.getChildFrame('body', index);
-				body.load(path+"/search.html");
-			}
-		});
-		layer.full(index);
-	};
-    $("#searchInput").keydown(function () {
-		//回车搜索
-		var event = window.event || arguments.callee.caller.arguments[0];
-		if (event.keyCode == 13){
-			var note_name = $('#searchInput').val().trim();
-			if(note_name == ""){
-				layer.msg("请输入需要模糊查询笔记",{icon:2,time:1000});
-			}else{
-				$.ajax({
-					url:path+"/note/searchnotes.do",
-					data:{"user_id":$.cookie("user_id"),"note_title":note_name},
-					type:"post",
-					dataType:"json",
-					success:function(result){
-
-					},
-					error:function(){
-						layer.msg("模糊查询错误")
-					}
-				});
-			}
-		}
-	});
 </script>
 <script type="text/javascript" src="../static/h-ui/js/H-ui.min.js"></script>
 <script type="text/javascript" src="../lib/jquery.contextmenu/jquery.contextmenu.r2.js"></script>

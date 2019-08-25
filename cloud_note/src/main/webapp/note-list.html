@@ -36,32 +36,6 @@
 <script type="text/javascript" src="../lib/laypage/1.2/laypage.js"></script>
 <script type="text/javascript" src="../lib/base.js"></script>
 <script type="text/javascript">
-    function datadel(){
-        var array = new Array();
-        for(var i = 0; i < $("tbody").children().length; i++){
-            if($("tbody").children("tr").eq(i).children("td").children("input").first().is(':checked') == true){
-                console.log("true");
-                console.log($("tbody").children("tr").attr("id"));
-                array[i] = $("tbody").children("tr").attr("id");
-            }
-        }
-        if(array.length == 0)
-            parent.layer.msg("选中的记录数目为0！",{icon:0,time:1000});
-        else{
-            $.ajax({
-                url:"",
-                type:"post",
-                data:{"notes_ids":JSON.stringify(array)},
-                dataType:"json",
-                success:function(result){
-
-                },
-                error:function(){
-                    parent.layer.msg("批量删除错误",{icon:0,time:1000});
-                }
-            });
-        }
-    };
     /*资讯-下架*/
     function article_stop(obj,id){
         layer.confirm('确认要下架吗？',function(index){

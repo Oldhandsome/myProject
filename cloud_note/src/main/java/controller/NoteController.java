@@ -105,6 +105,13 @@ public class NoteController {
 		result =  ns.deleteNote(note_id);
 		return result;
 	}
+	@ResponseBody
+	@RequestMapping("/deletenotes.do")
+	public NoteResult deleteNotes(String ids){
+		String[] note_id = ids.split(",");
+		NoteResult result = ns.deleteNotes(ids);
+		return result;
+	}
 	/*
 	 * 收藏笔记
 	 */
@@ -152,7 +159,14 @@ public class NoteController {
     	NoteResult result = ns.moveToTrush(note_id);
     	return result;
     }
-    
+    @ResponseBody
+	@RequestMapping("/movenotestotrash.do")
+	public NoteResult moveNotesToTrush(String ids){
+		String[] note_id = ids.split(",");
+    	NoteResult result = ns.moveNotesToTrush(note_id);
+    	return result;
+	}
+
     /*
      * 加载模糊匹配的笔记记录
      */
@@ -175,6 +189,13 @@ public class NoteController {
 	@RequestMapping("/trashrecover.do")
 	public NoteResult trashRecover(String note_id){
 		NoteResult result = ns.trashRecover(note_id);
+		return result;
+	}
+	@ResponseBody
+	@RequestMapping("/trashNotesRecover.do")
+	public NoteResult trashNotesRecover(String ids){
+    	String[] note_id = ids.split(",");
+		NoteResult result = ns.trashNotesRecovery(note_id);
 		return result;
 	}
     /*

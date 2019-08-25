@@ -2,6 +2,7 @@ package dao;
 
 
 import java.util.List;
+import java.util.Map;
 
 import entity.Information;
 import org.apache.ibatis.annotations.Param;
@@ -28,5 +29,7 @@ public interface NoteDao {
 	public int trashRecover(String note_id);
 	public List<Information> loadNotes(@Param("status") String status_id,
                                        @Param("user_id") String user_id);
-
+	public int deleteNotes(Map<String,Object> map);
+	public int moveNotesToTrush(Map<String , Object> map);
+	public int trashNotesRecover(Map<String , Object> map);
 }

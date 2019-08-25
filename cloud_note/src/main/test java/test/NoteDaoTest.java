@@ -1,20 +1,46 @@
 package test;
 
 import dao.NoteDao;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NoteDaoTest extends ParentClass {
     private NoteDao dao;
-    public NoteDaoTest(){
-        super();
-        dao = super.ac.getBean("noteDaoImpl",NoteDao.class);
+    @Before
+    public void init(){
+        dao = getApplicationContext().getBean("noteDaoImpl", NoteDao.class);
     }
     @Test
     public void test(){
-        String note_id = "e786f144-6df8-4a5f-a03b-3487458c43c0";
-        String note_book_id = "7c67fc47-ba75-4271-b56f-5f9999079795";
-        dao.moveNote(note_id,note_book_id,new Date().getTime());
+        Map<String,Object> map = new HashMap<String, Object>();
+        map.put("ids", new String[]{"072383e4-54fd-4cad-bdad-c87632996be4",
+                                    "08837535-68c5-4998-af01-773d8bc4faa0",
+                                    "0a0d4503-7b77-48a5-b845-5c9f6fba82cf"});
+        int rows = dao.deleteNotes(map);
+        System.out.println(rows);
+    }
+    @Test
+    public void test2(){
+        Map<String , Object> map = new HashMap<String,Object>();
+        map.put("updated_at", new Date().getTime());
+        map.put("ids",new String[]{"072383e4-54fd-4cad-bdad-c87632996be4",
+                "08837535-68c5-4998-af01-773d8bc4faa0",
+                "0a0d4503-7b77-48a5-b845-5c9f6fba82cf"});
+        int rows = dao.trashNotesRecover(map);
+        System.out.println(rows);
+    }
+    @Test
+    public void test3(){
+        Map<String , Object> map = new HashMap<String,Object>();
+        map.put("updated_at", new Date().getTime());
+        map.put("ids",new String[]{"072383e4-54fd-4cad-bdad-c87632996be4",
+                "08837535-68c5-4998-af01-773d8bc4faa0",
+                "0a0d4503-7b77-48a5-b845-5c9f6fba82cf"});
+        int rows = dao.trashNotesRecover(map);
+        System.out.println(rows);
     }
 }

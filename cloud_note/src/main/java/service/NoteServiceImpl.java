@@ -1,7 +1,9 @@
 package service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import dao.NoteDao;
 import entity.Note;
+import org.springframework.transaction.annotation.Transactional;
 import util.NoteResult;
 
 @Service("noteServiceImpl")
@@ -47,7 +50,7 @@ public class NoteServiceImpl implements NoteService{
 	/**
 	 * 加载笔记的内容
 	 * @param note_id
-	 * @return
+	 * @return result
 	 */
 	@Override
 	public NoteResult<String> loadNoteContent(String note_id) {
@@ -254,6 +257,62 @@ public class NoteServiceImpl implements NoteService{
 		}else{
 			result.setStatus(1);
 			result.setMsg("恢复失败");
+		}
+		return result;
+	}
+
+	@Transactional
+	@Override
+	public NoteResult deleteNotes(String... ids) {
+		NoteResult result = new NoteResult();
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("ids",ids);
+		int rows = dao.deleteNotes(map);
+		if (rows != ids.length){
+			result.setStatus(1);
+			result.setMsg("删除笔记出现错误！");
+			throw new RuntimeException("批量删除笔记出现错误！");
+		}else{
+			result.setStatus(0);
+			result.setMsg("删除笔记成功");
+		}
+		return result;
+	}
+
+	@Transactional
+	@Override
+	public NoteResult moveNotesToTrush(String... ids) {
+		NoteResult result = new NoteResult();
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("updated_at", new Date().getTime());
+		map.put("ids", ids);
+		int rows = dao.moveNotesToTrush(map);
+		if(rows == ids.length){
+			result.setStatus(0);
+			result.setMsg("回收成功");
+		}
+		else{
+			result.setStatus(1);
+			result.setMsg("回收失败");
+			throw new RuntimeException("批量回收笔记出现错误！");
+		}
+		return result;
+	}
+	@Transactional
+	@Override
+	public NoteResult trashNotesRecovery(String... ids){
+		NoteResult result = new NoteResult();
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("ids", ids);
+		int rows = dao.trashNotesRecover(map);
+		if(rows == ids.length){
+			result.setStatus(0);
+			result.setMsg("批量恢复成功");
+		}
+		else{
+			result.setStatus(1);
+			result.setMsg("批量恢复失败");
+			throw new RuntimeException("批量恢复笔记错误!");
 		}
 		return result;
 	}

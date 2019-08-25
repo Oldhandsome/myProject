@@ -1,0 +1,99 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>酒店管理系统</title>
+	<link href="../static/h-ui/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+	<link href="../static/h-ui.admin/css/H-ui.login.css" rel="stylesheet" type="text/css" />
+	<link href="../static/h-ui.admin/css/style.css" rel="stylesheet" type="text/css" />
+	<link href="../lib/Hui-iconfont/1.0.8/iconfont.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="loginWraper">
+		<!--  action="login" method="post" -->
+		  <div class="loginBox">
+		    <form id="form" class="form form-horizontal">
+		      <div class="row cl">
+		        <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60d;</i></label>
+		        <div class="formControls col-xs-8">
+		          <input id="username" name="username" type="text" placeholder="账户" class="input-text size-L">
+		        </div>
+		      </div>
+		      <div class="row cl">
+		        <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60e;</i></label>
+		        <div class="formControls col-xs-8">
+		          <input id="password" name="password" type="password" placeholder="密码" class="input-text size-L">
+		        </div>
+		      </div>
+		   <!--  <div class="row cl">
+        		<div class="formControls col-xs-8 col-xs-offset-3">
+          		<input name="validatecode" class="input-text size-L" type="text" placeholder="验证码" onblur="if(this.value==''){this.value='验证码:'}" onclick="if(this.value=='验证码:'){this.value='';}" value="验证码:" style="width:150px;">
+          		<img src="ValidateImage" onclick="this.setAttribute('src','ValidateImage?x='+Math.random());"> 
+          		<a id="kanbuq" href="javascript:;" >看不清，换一张</a> 
+          		</div>
+      		</div> -->
+		    <div class="row cl">
+        		<div class="formControls col-xs-8 col-xs-offset-3">
+          			<label for="online">
+            		<input type="checkbox" name="online" id="online" value="1">
+            		使我保持登录状态</label>
+       			</div>
+    			</div>
+		      <div class="row cl">
+		        <div class="formControls col-xs-8 col-xs-offset-3">
+		          <input id="submitBtn" name="submitBtn" type="submit" class="btn btn-success radius size-L" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">
+		          <input id="registerBtn" name="registerBtn" type="button" class="btn btn-default radius size-L" onclick="location.href=path+'/user/toregister.do'" value="&nbsp;注&nbsp;&nbsp;&nbsp;&nbsp;册&nbsp;">
+		        </div>
+		        
+		      </div>
+		    </form>
+		  </div>
+		</div>
+		<div class="footer">Copyright 酒店管理系统 by</div>
+		<script type="text/javascript" src="../lib/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+		<script type="text/javascript" src="../static/h-ui/js/H-ui.min.js"></script>
+		<script type="text/javascript" src="../lib/base.js"></script>
+		<script type="text/javascript">
+			 $(function(){
+				$("#form").validate({
+					rules:{
+						user_id:{
+							required:true,
+							minlength:4,
+							maxlength:10
+						},
+						password:{
+							required:true,
+						},
+					},
+					onkeyup:false,
+					focusCleanup:true,
+					success:"valid",
+					submitHandler:function(form){
+						$(form).ajaxSubmit({
+							"url": path+"/user/checkUser.action",
+							"type": "post",
+							"dataType":"json",
+							success: function(data){
+								//alert(data.status);
+								/* if (obj.flag == '2')
+									alert('验证码错误!');*/
+									//window.location.href = "index";
+								if(data.status == 0)
+									window.location.href = path+"/user/index.action";
+								else
+									alert(data.msg);
+							},
+							error:function(){
+								alert("登陆失败！");
+							}
+						});
+						
+					}
+				});
+			}) 
+		</script>
+	</body>
+</html>
+

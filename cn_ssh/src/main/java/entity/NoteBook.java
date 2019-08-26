@@ -1,26 +1,47 @@
 package entity;
 
-public class NoteBook {
-    private String noteBookId;
-    private String noteBookName;
+import java.io.Serializable;
+import java.util.Objects;
+
+public class NoteBook implements Serializable {
+    private String note_book_id;
+    private String user_id;
+    private String note_book_type_id;
+    private String note_book_name;
     private String explaination;
-    private Long createdAt;
-    private Long updatedAt;
+    private Long created_at;
+    private Long updated_at;
 
-    public String getNoteBookId() {
-        return noteBookId;
+    public String getNote_book_id() {
+        return note_book_id;
     }
 
-    public void setNoteBookId(String noteBookId) {
-        this.noteBookId = noteBookId;
+    public void setNote_book_id(String note_book_id) {
+        this.note_book_id = note_book_id;
     }
 
-    public String getNoteBookName() {
-        return noteBookName;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setNoteBookName(String noteBookName) {
-        this.noteBookName = noteBookName;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getNote_book_type_id() {
+        return note_book_type_id;
+    }
+
+    public void setNote_book_type_id(String note_book_type_id) {
+        this.note_book_type_id = note_book_type_id;
+    }
+
+    public String getNote_book_name() {
+        return note_book_name;
+    }
+
+    public void setNote_book_name(String note_book_name) {
+        this.note_book_name = note_book_name;
     }
 
     public String getExplaination() {
@@ -31,47 +52,51 @@ public class NoteBook {
         this.explaination = explaination;
     }
 
-    public Long getCreatedAt() {
-        return createdAt;
+    public Long getCreated_at() {
+        return created_at;
     }
 
-    public void setCreatedAt(Long createdAt) {
-        this.createdAt = createdAt;
+    public void setCreated_at(Long created_at) {
+        this.created_at = created_at;
     }
 
-    public Long getUpdatedAt() {
-        return updatedAt;
+    public Long getUpdated_at() {
+        return updated_at;
     }
 
-    public void setUpdatedAt(Long updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdated_at(Long updated_at) {
+        this.updated_at = updated_at;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (!(o instanceof NoteBook)) return false;
         NoteBook noteBook = (NoteBook) o;
-
-        if (noteBookId != null ? !noteBookId.equals(noteBook.noteBookId) : noteBook.noteBookId != null) return false;
-        if (noteBookName != null ? !noteBookName.equals(noteBook.noteBookName) : noteBook.noteBookName != null)
-            return false;
-        if (explaination != null ? !explaination.equals(noteBook.explaination) : noteBook.explaination != null)
-            return false;
-        if (createdAt != null ? !createdAt.equals(noteBook.createdAt) : noteBook.createdAt != null) return false;
-        if (updatedAt != null ? !updatedAt.equals(noteBook.updatedAt) : noteBook.updatedAt != null) return false;
-
-        return true;
+        return Objects.equals(getNote_book_id(), noteBook.getNote_book_id()) &&
+                Objects.equals(getUser_id(), noteBook.getUser_id()) &&
+                Objects.equals(getNote_book_type_id(), noteBook.getNote_book_type_id()) &&
+                Objects.equals(getNote_book_name(), noteBook.getNote_book_name()) &&
+                Objects.equals(getExplaination(), noteBook.getExplaination()) &&
+                Objects.equals(getCreated_at(), noteBook.getCreated_at()) &&
+                Objects.equals(getUpdated_at(), noteBook.getUpdated_at());
     }
 
     @Override
     public int hashCode() {
-        int result = noteBookId != null ? noteBookId.hashCode() : 0;
-        result = 31 * result + (noteBookName != null ? noteBookName.hashCode() : 0);
-        result = 31 * result + (explaination != null ? explaination.hashCode() : 0);
-        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
-        result = 31 * result + (updatedAt != null ? updatedAt.hashCode() : 0);
-        return result;
+        return Objects.hash(getNote_book_id(), getUser_id(), getNote_book_type_id(), getNote_book_name(), getExplaination(), getCreated_at(), getUpdated_at());
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "note_book_id='" + note_book_id + '\'' +
+                ", user_id='" + user_id + '\'' +
+                ", note_book_type_id='" + note_book_type_id + '\'' +
+                ", note_book_name='" + note_book_name + '\'' +
+                ", explaination='" + explaination + '\'' +
+                ", created_at=" + created_at +
+                ", updated_at=" + updated_at +
+                '}';
     }
 }

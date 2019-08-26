@@ -11,11 +11,17 @@
     <package name="user" namespace="/user" extends="struts-default,json-default">
         <interceptors>
             <interceptor name="exInterceptor" class="exceptionInterceptor"/>
+            <!--定义cookie和session拦截器-->
+            <interceptor name="cookieInterceptor" class="org.apache.struts2.interceptor.CookieInterceptor"/>
+            <interceptor name="sessionInterceptor" class="sessionInterceptor"/>
             <interceptor-stack name="jsonStack">
                 <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="cookieInterceptor"/>
+                <interceptor-ref name="sessionInterceptor"/>
                 <interceptor-ref name="exInterceptor"/>
             </interceptor-stack>
         </interceptors>
+
         <!--设置默认的拦截器栈，使下面所有的action都会经过jsonStack-->
         <default-interceptor-ref name="jsonStack"/>
         <!--定义全局返回值；若返回值为json则 为异步，且返回参数为result-->
@@ -23,6 +29,7 @@
             <result type="json" name="json">
                 <param name="root">result</param>
             </result>
+            <result type="redirectAction" name="nosession">tologin</result>
         </global-results>
         
         <action name="tologin" class="userAction" method="toLogin">
@@ -35,20 +42,4 @@
         </action>
     </package>
 
-    <package name="note" namespace="/note" extends="json-default">
-        <interceptors>
-            <interceptor name="exInterceptor" class="exceptionInterceptor"/>
-            <interceptor-stack name="jsonStack">
-                <interceptor-ref name="defaultStack"/>
-                <interceptor-ref name="exInterceptor"/>
-            </interceptor-stack>
-        </interceptors>
-
-        <global-results>
-            <result type="json" name="success">
-                <param name="root">result</param>
-            </result>
-        </global-results>
-
-    </package>
 </struts>

@@ -7,6 +7,7 @@ import service.UserService;
 import util.NoteUtil;
 
 import javax.annotation.Resource;
+
 //多线程接受，单线程保存
 @Controller
 @Scope("prototype")
@@ -35,6 +36,9 @@ public class UserAction extends JsonAction {
         System.out.println(username + " " + password);
         System.out.println(NoteUtil.md5(password));
         User user = userService.checkUser(username, NoteUtil.md5(password));
+        addCookie("user_id",user.getUserId());
+        addSession("user_id",user.getUserId());
+        addSession("user_nae",user.getUserName());
         setResult(user);
         return JSON;
     }

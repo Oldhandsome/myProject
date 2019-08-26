@@ -5,10 +5,12 @@
 <hibernate-mapping>
 
     <class name="entity.NoteBook" table="note_book" schema="cloudnote">
-        <id name="noteBookId" column="note_book_id"/>
-        <property name="noteBookName" column="note_book_name"/>
+        <id name="note_book_id" column="note_book_id"/>
+        <property name="user_id" column="user_id"/>
+        <property name="note_book_type_id"  column="note_book_type_id"/>
+        <property name="note_book_name" column="note_book_name"/>
         <property name="explaination" column="explaination"/>
-        <property name="createdAt" column="created_at"/>
-        <property name="updatedAt" column="updated_at"/>
+        <property name="created_at" column="created_at"/>
+        <property name="updated_at" column="updated_at"/>
     </class>
 </hibernate-mapping>

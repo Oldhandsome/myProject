@@ -2,19 +2,12 @@ package controller;
 
 
 import com.opensymphony.xwork2.ActionInvocation;
+import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import com.opensymphony.xwork2.interceptor.Interceptor;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ExceptionInterceptor implements Interceptor {
-    @Override
-    public void destroy() {
-
-    }
-    @Override
-    public void init() {
-
-    }
+public class ExceptionInterceptor extends AbstractInterceptor {
     @Override
     public String intercept(ActionInvocation actionInvocation) throws Exception {
         try {

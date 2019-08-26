@@ -53,6 +53,7 @@
 		<script type="text/javascript" src="../lib/jquery/1.9.1/jquery.min.js"></script>
 		<script type="text/javascript" src="../lib/jquery.validation/1.14.0/jquery.validate.js"></script>
 		<script type="text/javascript" src="../static/h-ui/js/H-ui.min.js"></script>
+        <script type="text/javascript" src="../lib/layer/2.4/layer.js"></script>
 		<script type="text/javascript" src="../lib/base.js"></script>
 		<script type="text/javascript">
 			 $(function(){
@@ -76,17 +77,16 @@
 							"type": "post",
 							"dataType":"json",
 							success: function(data){
-								//alert(data.status);
 								/* if (obj.flag == '2')
 									alert('验证码错误!');*/
 									//window.location.href = "index";
 								if(data.status == 0)
 									window.location.href = path+"/user/index.action";
 								else
-									alert(data.msg);
+									layer.msg(data.msg);
 							},
 							error:function(){
-								alert("登陆失败！");
+								layer.msg("登陆异常！");
 							}
 						});
 						

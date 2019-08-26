@@ -3,16 +3,20 @@ package dao;
 
 import entity.Information;
 import entity.Note;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Repository
-public class NoteDaoImpl implements NoteDao {
+public class NoteDaoImpl implements NoteDao  {
     @Resource
     HibernateTemplate hibernateTemplate;
 
@@ -95,27 +99,41 @@ public class NoteDaoImpl implements NoteDao {
         note.setNote_status_id("2");
         return 0;
     }
-
+//new entity.Information
     @Override
     @Transactional
     public List<Information> findByName(String user_id, String note_title){
-        String hql = "select new Information(note_id,note_title,note_type_id,note_status_id" +
-                "Note.created_at,Note.updated_at,note_book_name ) " +
-                "from Note inner join NoteBook where Note.note_book_id = NoteBook.note_Book_id" +
-                "where Note.user_id = ? and Note.note_title like %?% order by note_title DESC";
-        List<Information> infos= hibernateTemplate.find(hql,user_id,note_title);
+        String sql = "select note_id as id, note_title as name , note_type_id as type, note_status_id as status , " +
+                        "note.created_at as created_at, note.updated_at as updated_at, note_book_name as location " +
+                        "from note inner join note_book " +
+                        "on note.note_book_id = note_book.note_book_id " +
+                        "where note.user_id = '%s' and note.note_title like '%s' " +
+                        "ORDER BY note_title DESC";
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        List<Information> infos = session.createSQLQuery(String.format(sql,user_id,note_title)).addEntity(Information.class).list();
         return infos;
     }
 
     @Override
     @Transactional
     public List<Information> trash(String user_id){
-        String hql = "select new Information(note_id,note_title,note_type_id,note_status_id" +
-                "Note.created_at,Note.updated_at,note_book_name ) " +
-                "from Note inner join NoteBook where Note.note_book_id = NoteBook.note_Book_id" +
-                "where Note.user_id = ? and note_status_id = 2 order by note_title DESC";
-        List<Information> infos = hibernateTemplate.find(hql,user_id);
+        String sql = "select note_id as id ,note_title as name ,note_type_id as type ,note_status_id as status," +
+                        "note.created_at as created_at ,note.updated_at as updated_at ,note_book_name  as location " +
+                        "from note inner join note_book " +
+                        "on note.note_book_id = note_book.note_book_id " +
+                        "where note.user_id = '%s' and note_status_id = '2' order by note_title DESC";
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        List<Information> infos = session.createSQLQuery(String.format(sql,user_id)).addEntity(Information.class).list();
         return infos;
+    }
+
+    @Override
+    @Transactional
+    public int moveNotesToTrash(String ids){
+        String sql = "update note set note_status_id = '2' , updated_at = unix_timestamp() " +
+                        "where note_id in (%s)";
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        return session.createSQLQuery(String.format(sql, ids)).executeUpdate();
     }
 
 }

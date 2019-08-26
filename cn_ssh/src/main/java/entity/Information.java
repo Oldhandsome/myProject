@@ -7,22 +7,22 @@ public class Information implements Serializable {
     //信息类
     private String id;
     private String name;
+    private String type;
+    private String status;
     private long created_at;
     private long updated_at;
-    private String status;
-    private String type;
     private String location;
 
     public Information() {
     }
 
-    public Information(String id, String name, long created_at, long updated_at, String status, String type, String location) {
+    public Information(String id, String name, String type, String status, long created_at, long updated_at, String location) {
         this.id = id;
         this.name = name;
+        this.type = type;
+        this.status = status;
         this.created_at = created_at;
         this.updated_at = updated_at;
-        this.status = status;
-        this.type = type;
         this.location = location;
     }
 

@@ -11,5 +11,4 @@ public interface NoteBookDao {
 
     int updateBook(NoteBook book);
 
-    int deleteNoteBook(String id);
 }

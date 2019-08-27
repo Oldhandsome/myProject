@@ -82,7 +82,7 @@ public abstract class JsonAction extends ActionSupport
      * @param error
      */
     protected void setResult(String error){
-        result.put("status",0);
+        result.put("status",1);
         result.put("msg", error);
         result.put("data",null);
     }

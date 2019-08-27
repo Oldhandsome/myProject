@@ -1,9 +1,9 @@
 package dao;
 
+import entity.Note;
 import entity.NoteBook;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -33,10 +33,5 @@ public class NoteBookDaoImpl implements NoteBookDao {
         book1.setUpdated_at(new Date().getTime());
         return 0;
     }
-    @Override
-    public int deleteNoteBook(String id){
-        String hql = "from NoteBook where note_book_id = ?";
-        hibernateTemplate.delete(hql,id);
-        return 0;
-    }
+
 }

@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
-import javax.sound.sampled.Line;
 import java.util.Date;
 import java.util.List;
 import java.util.StringJoiner;
@@ -22,8 +21,8 @@ public class NoteDaoTest extends ParentTest {
         hibernateTemplate = getApplicationContext().getBean("hibernateTemplate",HibernateTemplate.class);
     }
     @Test
-    public void testFindByUserId(){
-        List<Note> notes = noteDao.findByUserId("6419a47a-c980-4531-b538-3f8ade974f7c");
+    public void testFindByBookId(){
+        List<Note> notes = noteDao.findByBookId("6419a47a-c980-4531-b538-3f8ade974f7c");
         for(Note note:notes){
             System.out.println(note);
         }
@@ -143,4 +142,18 @@ public class NoteDaoTest extends ParentTest {
         System.out.println(noteDao.moveNotesToTrash(str));
     }
 
+    @Test
+    public void testTrashRecovery(){
+        String[] ids = {"08837535-68c5-4998-af01-773d8bc4faa0",
+                "357eb29d-9edf-4d6e-b791-08e75ed67a48",
+                "895a3b55-e4ed-4c94-a78f-7b15ac3c37b3",
+                "ce9633f8-5f02-4cab-a28d-b92e4188df9f",
+                "e39cddd3-c9d1-41a7-9f77-eeb5ba0a8ad7"};
+        StringJoiner joiner = new StringJoiner(",");
+        for(String id:ids){
+            joiner.add(String.format("'%s'",id));
+        }
+        String str = joiner.toString();
+        System.out.println(noteDao.trashRecovery(str));
+    }
 }

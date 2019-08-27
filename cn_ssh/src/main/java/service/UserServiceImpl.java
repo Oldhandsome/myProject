@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 
 @Service
 public class UserServiceImpl implements UserService{
-    @Resource
+    @Resource(name = "userDaoImpl")
     private UserDao userDao;
 
     @Override

@@ -6,7 +6,10 @@ import entity.Note;
 import java.util.List;
 
 public interface NoteDao{
-    List<Note> findByUserId(String book_id);
+
+    Note findByNoteId(String note_id);
+
+    List<Note> findByBookId(String book_id);
 
     String loadContent(String note_id);
 
@@ -29,4 +32,6 @@ public interface NoteDao{
     List<Information> trash(String user_id);
 
     int moveNotesToTrash(String ids);
+
+    int trashRecovery(String ids);
 }

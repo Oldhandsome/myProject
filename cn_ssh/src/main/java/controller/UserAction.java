@@ -38,7 +38,7 @@ public class UserAction extends JsonAction {
         User user = userService.checkUser(username, NoteUtil.md5(password));
         addCookie("user_id",user.getUserId());
         addSession("user_id",user.getUserId());
-        addSession("user_nae",user.getUserName());
+        addSession("user_name",user.getUserName());
         setResult(user);
         return JSON;
     }

@@ -44,9 +44,9 @@ public class NoteBookDaoTest extends ParentTest {
         System.out.println(noteBookDao.updateBook(book));;
     }
 
-    @Test
+  /*  @Test
     public void testDeleteBook(){
         String id = "22439a7d-c0e1-4ed1-8939-a7ece4795bf5";
         System.out.println(noteBookDao.deleteNoteBook(id));
-    }
+    }*/
 }

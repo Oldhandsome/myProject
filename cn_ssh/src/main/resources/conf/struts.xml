@@ -7,7 +7,7 @@
 <struts>
     <include file="struts-default.xml"/>
     <include file="struts-plugin.xml"/>
-    
+
     <package name="user" namespace="/user" extends="struts-default,json-default">
         <interceptors>
             <interceptor name="exInterceptor" class="exceptionInterceptor"/>
@@ -40,6 +40,86 @@
         <action name="index" class="userAction" method="toIndex">
             <result name="success">/index.html</result>
         </action>
+        <action name="checkpwd" class="userAction" method="checkPwd"/>
+        <action name="changepwd" class="userAction" method="changePwd"/>
+        <action name="register" class="userAction" method="register"/>
+        <action name="toregister" class="userAction" method="toRegister">
+            <result name="success">/register.html</result>
+        </action>
     </package>
 
+    <package name="book" namespace="/book" extends="json-default,struts-default">
+        <interceptors>
+            <interceptor name="exInterceptor" class="exceptionInterceptor"/>
+            <!--定义cookie和session拦截器-->
+            <interceptor name="cookieInterceptor" class="org.apache.struts2.interceptor.CookieInterceptor"/>
+            <interceptor name="sessionInterceptor" class="sessionInterceptor"/>
+            <interceptor-stack name="jsonStack">
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="cookieInterceptor"/>
+                <interceptor-ref name="sessionInterceptor"/>
+                <interceptor-ref name="exInterceptor"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="jsonStack"/>
+        <global-results>
+            <result type="json" name="json">
+                <param name="root">result</param>
+            </result>
+            <result type="redirectAction" name="nosession">tologin</result>
+        </global-results>
+
+        <action name="loadbooks" class="bookAction" method="loadBooksByUserId"/>
+        <action name="toaddnotebook" class="bookAction" method="toAddBooks">
+            <result>/notebook_add.html</result>
+        </action>
+        <action name="addnotebook" class="bookAction" method="addBook"/>
+    </package>
+
+    <package name="note" namespace="/note" extends="struts-default,json-default">
+        <interceptors>
+            <interceptor name="exInterceptor" class="exceptionInterceptor"/>
+            <!--定义cookie和session拦截器-->
+            <interceptor name="cookieInterceptor" class="org.apache.struts2.interceptor.CookieInterceptor"/>
+            <interceptor name="sessionInterceptor" class="sessionInterceptor"/>
+            <interceptor-stack name="jsonStack">
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="cookieInterceptor"/>
+                <interceptor-ref name="sessionInterceptor"/>
+                <interceptor-ref name="exInterceptor"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="jsonStack"/>
+        <global-results>
+            <result type="json" name="json">
+                <param name="root">result</param>
+            </result>
+            <result type="redirectAction" name="nosession">tologin</result>
+        </global-results>
+
+        <action name="loadnotes" class="noteAction" method="loadNotes"/>
+        <action name="toaddnote" class="noteAction" method="toAddNote">
+            <result name="success">/note_add.html</result>
+        </action>
+        <action name="addnote" class="noteAction" method="addNote"/>
+        <action name="loadNoteContent" class="noteAction" method="getContent"/>
+        <action name="updatenote" class="noteAction" method="updateNote"/>
+        <action name="tomovenote" class="noteAction" method="toMoveNote">
+            <result>/note_move.html</result>
+        </action>
+        <action name="movenote" class="noteAction" method="moveNote"/>
+        <action name="starnote" class="noteAction" method="starNote"/>
+        <action name="unstarnote" class="noteAction" method="unStarNote"/>
+        <action name="movetotrash" class="noteAction" method="noteToTrash"/>
+        <action name="list" class="noteAction" method="list">
+            <result name="success">/note-list.html</result>
+        </action>
+        <action name="searchnotes" class="noteAction" method="titleSearch"/>
+        <action name="deletenote" class="noteAction" method="deleteNote"/>
+        <action name="movenotestotrash" class="noteAction" method="notesToTrash"/>
+        <action name="loadtrash" class="noteAction" method="loadTrash"/>
+        <action name="trashrecover" class="noteAction" method="trashRecovery"/>
+        <action name="trashNotesRecover" class="noteAction" method="trashnotesRecovery"/>
+        <action name="deletenotes" class="noteAction" method="deleteNotes"/>
+    </package>
 </struts>

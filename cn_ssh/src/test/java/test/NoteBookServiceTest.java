@@ -1,5 +1,7 @@
 package test;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import entity.Note;
 import entity.NoteBook;
 import org.junit.Before;
@@ -47,5 +49,17 @@ public class NoteBookServiceTest extends ParentTest{
         noteBook.setExplaination("wahaha");
         noteBook.setUpdated_at(new Date().getTime());
         System.out.println(noteBookService.updateNoteBook(noteBook));
+    }
+    @Test
+    public void testJson(){
+        String[] strs = {"abcd","1234","efgh"};
+        System.out.println(strs);
+        String str = JSONArray.toJSONString(strs);
+        System.out.println(str);
+        List<String> obj = JSON.parseArray(str, String.class);
+        System.out.println(obj);
+        Object obj1 = JSONArray.parse(str);
+        System.out.println(obj1);
+
     }
 }

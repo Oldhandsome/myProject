@@ -156,4 +156,5 @@ public class NoteDaoTest extends ParentTest {
         String str = joiner.toString();
         System.out.println(noteDao.trashRecovery(str));
     }
+
 }

@@ -56,8 +56,8 @@
 	</div>
 	<div class="row cl">
 		<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-			<input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;注册&nbsp;&nbsp;">
-			<input class="btn btn-primary radius" type="button" onclick="location.href=path+'/user/tologin.do'" value="&nbsp;&nbsp;登录&nbsp;&nbsp;">
+			<button class="btn btn-primary radius" type="submit">&nbsp;&nbsp;注册&nbsp;&nbsp;</button>
+			<button class="btn btn-primary radius" type="button" onclick="location.href=path+'/user/tologin.action'">&nbsp;&nbsp;登录&nbsp;&nbsp;</button>
 		</div>
 	</div>
 	</form>
@@ -106,11 +106,12 @@ $(function(){
 		submitHandler:function(form){
 			$(form).ajaxSubmit({
 				type: 'post',
-				url: path+"/user/register.do",
+				url: path+"/user/register.action",
 				dataType:"json",
-				success: function(data){
-					if (data.status == 0){
-						layer.msg('注册成功!您的账号为'+data.data,{icon:1,time:999999});
+				success: function(result){
+					if (result.status == 0){
+						layer.msg('注册成功!您的账号为'+result.data,{icon:1,time:999999});
+						$('input').val('');
 					}
 					else
 						layer.msg('注册失败',{icon:1,time:999999});

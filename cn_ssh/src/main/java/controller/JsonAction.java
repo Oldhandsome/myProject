@@ -78,12 +78,12 @@ public abstract class JsonAction extends ActionSupport
     }
 
     /**
-     * 错误信息展示给用户
-     * @param error
+     * 信息展示给用户
+     * @param msg
      */
-    protected void setResult(String error){
-        result.put("status",1);
-        result.put("msg", error);
+    protected void setResult(String msg,int status){
+        result.put("status",status);
+        result.put("msg", msg);
         result.put("data",null);
     }
 
@@ -92,7 +92,7 @@ public abstract class JsonAction extends ActionSupport
      * @param e
      */
     protected void setResult(Throwable e){
-        this.setResult(e.getMessage());
+        this.setResult(e.getMessage(),1);
     }
 
 }

@@ -86,6 +86,14 @@ public class NoteDaoImpl implements NoteDao  {
         note.setNote_status_id("2");
         return 0;
     }
+
+    @Override
+    public int trashNoteRecovery(String note_id){
+        Note note = hibernateTemplate.get(Note.class,note_id);
+        note.setNote_status_id("1");
+        return 0;
+    }
+
     //绕过hibernate，直接操作jdbc
     @Override
     public List<Information> findByName(String user_id, String note_title){
@@ -93,7 +101,7 @@ public class NoteDaoImpl implements NoteDao  {
                         "note.created_at as created_at, note.updated_at as updated_at, note_book_name as location " +
                         "from note inner join note_book " +
                         "on note.note_book_id = note_book.note_book_id " +
-                        "where note.user_id = '%s' and note.note_title like '%s' " +
+                        "where note.user_id = '%s' and note.note_title like '%s' and note.note_status_id in ('1','4') " +
                         "ORDER BY note_title DESC";
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         List<Information> infos = session.createSQLQuery(String.format(sql,user_id,note_title)).addEntity(Information.class).list();
@@ -123,6 +131,14 @@ public class NoteDaoImpl implements NoteDao  {
     @Override
     public int trashRecovery(String ids){
         String sql = "update note set note_status_id = '1' , updated_at = unix_timestamp() " +
+                "where note_id in (%s)";
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        return session.createSQLQuery(String.format(sql,ids)).executeUpdate();
+    }
+
+    @Override
+    public int notesDelete(String ids){
+        String sql = "update note set note_status_id = '3' , updated_at = unix_timestamp() " +
                 "where note_id in (%s)";
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         return session.createSQLQuery(String.format(sql,ids)).executeUpdate();

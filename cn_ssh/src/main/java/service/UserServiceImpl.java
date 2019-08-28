@@ -4,6 +4,7 @@ import dao.UserDao;
 import entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import util.RandomUtil;
 
 import javax.annotation.Resource;
 
@@ -28,11 +29,14 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public User register(User user) throws RuntimeException{
-        if(userDao.findUserById(user.getUserId()) == null){
-            int i = userDao.addUser(user);
-            if(i == 0)
-                return user;
-        }
+        String id = null;
+        do {
+            id = RandomUtil.random();
+        }while(userDao.findUserById(id) != null);
+        user.setUserId(id);
+        int i = userDao.addUser(user);
+        if(i == 0)
+            return user;
         throw new RuntimeException("用户未成功创建");
     }
 

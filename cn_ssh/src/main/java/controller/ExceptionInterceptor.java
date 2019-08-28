@@ -3,7 +3,6 @@ package controller;
 
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
-import com.opensymphony.xwork2.interceptor.Interceptor;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,7 +15,6 @@ public class ExceptionInterceptor extends AbstractInterceptor {
             return str;
         }catch(Exception e){
             //出现异常则会返回异常信息
-            e.printStackTrace();
             Object object = actionInvocation.getAction();
             //若是JsonAction的子类抛出的异常，
             if(object instanceof JsonAction){

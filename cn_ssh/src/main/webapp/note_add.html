@@ -106,17 +106,16 @@ $(function(){
 			var user_id = getCookie("user_id");
 			//2.判断得到的cookie中是否含有有效的ID
 			if(user_id == null){
-				window.location.href = path+"/user/tologin.do";
+				window.location.href = path+"/user/tologin.action";
 			}
 			else{
 				$(form).ajaxSubmit({
-					url:path+"/note/addnote.do",
+					url:path+"/note/addnote.action",
 					type:"post",
 					dataType:"json",
 					success:function(result){
 						if (result.status == 0){
-							parent.layer.msg(result.msg,{icon:1,time:1000});
-							// layer.msg('添加笔记成功',{icon: 1,time:2000});
+							parent.layer.msg("笔记添加成功",{icon:1,time:1000});
 							var sul = createUl(result.data.note_id,result.data.note_title,result.data.note_status_id);
 							var selector = "dl[data-bookId="+result.data.note_book_id+"]";
 							$(selector,parent.document).find("ul#first").append(sul);

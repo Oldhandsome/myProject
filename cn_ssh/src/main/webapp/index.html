@@ -43,9 +43,8 @@
 				<ul class="cl">
 					<li class="dropDown dropDown_hover"><a href="javascript:;" class="dropDown_A"><i class="Hui-iconfont">&#xe600;</i> 新增  <i class="Hui-iconfont">&#xe6d5;</i></a>
 						<ul class="dropDown-menu menu radius box-shadow">
-							<li><a href="javascript:;" onclick="note_add('添加笔记','/note/toaddnote.do')"><i class="Hui-iconfont">&#xe616;</i>笔记</a></li>
-							<li><a href="javascript:;" onclick="notebook_add('添加笔记本本','/book/toaddnotebook.do')"><i class="Hui-iconfont">&#xe720;</i>笔记本</a></li>
-							
+							<li><a href="javascript:;" onclick="note_add('添加笔记','/note/toaddnote.action')"><i class="Hui-iconfont">&#xe616;</i>笔记</a></li>
+							<li><a href="javascript:;" onclick="notebook_add('添加笔记本本','/book/toaddnotebook.action')"><i class="Hui-iconfont">&#xe720;</i>笔记本</a></li>
 					</ul>
 				</li>
 			</ul>
@@ -53,11 +52,11 @@
 		<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
 			<ul class="cl">
 				<li>
-					<a href="javascript:void(0);" onclick="note_search('查询笔记','/note/list.do')" >
+					<a href="javascript:void(0);" onclick="note_search('查询笔记','/note/list.action')" >
 					<i class="Hui-iconfont">&#xe709;</i></a>
 				</li>
                 <li>
-                    <a href="javascript:void(0);" onclick="trash('回收站','/note/list.do')" >
+                    <a href="javascript:void(0);" onclick="trash('回收站','/note/list.action')" >
                         <i class="Hui-iconfont">&#xe6e2;</i></a>
                 </li>
                 <li class="dropDown dropDown_hover">

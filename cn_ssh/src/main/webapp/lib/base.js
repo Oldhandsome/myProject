@@ -1,7 +1,7 @@
 /**
  * 
  */
-var path ="http://localhost:8080/ssh_1_war_exploded";
+var path ="http://localhost:8080/ssh";
 
 /*
  * 根据用户的ID加载笔记本和笔记
@@ -24,9 +24,9 @@ function modifyPWD(){
     layer.prompt({title: '输入当前密码，并确认', formType: 1}, function(oldPass, index){
         layer.close(index);
         $.ajax({
-            url:path+"/user/checkpwd.do",
+            url:path+"/user/checkpwd.action",
             type:"post",
-            data:{"pwd":oldPass,"user_id":$.cookie("user_id")},
+            data:{"password":oldPass,"user_id":$.cookie("user_id")},
             dataType:"json",
             success:function(result){
                 if(result.status == 0)
@@ -37,7 +37,7 @@ function modifyPWD(){
                                 layer.msg("两次输入密码不一致");
                             else{
                                 $.ajax({
-                                    url:path+"/user/changepwd.do",
+                                    url:path+"/user/changepwd.action",
                                     data:{"user_id":$.cookie("user_id"),"password":sePass},
                                     type:"post",
                                     dataType:"json",
@@ -74,13 +74,13 @@ function loadUserBooks(){
 	}
 	else{
 		$.ajax({
-			url:path+"/book/loadbooks.do",
+			url:path+"/book/loadbooks.action",
 			type:"post",
 			data:{"user_id":user_id},
 			dataType:"json",
 			success:function(result){
 				if(result.status != 0){
-					alert(result.msg);
+					layer.msg(result.msg,{icon:0,time:1000});
 				}
 				//1为空，2为查询失败，0为集合存在
 				else if(result.status == 0){
@@ -107,23 +107,28 @@ function loadNotes(array){
 	var user_id = getCookie("user_id");
 	//2.判断得到的cookie中是否含有有效的ID
 	if(user_id == null && user_id != ""){
-		window.location.href = path+"/user/tologin.do";
+		window.location.href = path+"/user/tologin.action";
 	}
 	else{
 		$.ajax({
-			url:path+"/note/loadnotes.do",
+			url:path+"/note/loadnotes.action",
 			type:"post",
 			data:{"array":JSON.stringify(array)},
 			dataType:"json",
 			success:function(result){
-				for(var i = 0;i < array.length;i++){
-					if(result[array[i]]["status"] == 0){
-						for(var j = 0;j < result[array[i]]["data"].length;j++){
-						    // console.log(result[array[i]]["data"][j]["note_id"]+"  "+result[array[i]]["data"][j]["note_status_id"]);
-							$("dl").eq(i).find("ul#first").append(createUl(result[array[i]]["data"][j]["note_id"],result[array[i]]["data"][j]["note_title"],result[array[i]]["data"][j]["note_status_id"]));
-						}
-					}
-				}
+			    if(result["status"] == 0){
+			        //获取书籍s
+			        var books = result["data"];
+			        for(var i = 0;i < array.length;i++){
+                        var book_id = array[i];
+                        //books[book_id].length笔记的数量
+                        var selector = "dl[data-bookId="+book_id+"]";
+			            for(var j = 0 ; j < books[book_id].length;j++){
+			                var note = books[book_id][j];
+                            $(selector).find("ul#first").append(createUl(note["note_id"],note["note_title"],note["note_status_id"]));
+			            }
+			        }
+			    }
 			},
 			error:function(){
 				alert("笔记加载失败！");
@@ -172,7 +177,7 @@ $("#saveNote").click(function(){
     }
     else{
         $.ajax({
-            url:path+"/note/updatenote.do",
+            url:path+"/note/updatenote.action",
             data:{"note_id":$("#articleId").val(),
                 "note_title":$("#articletitle").val(),
                 "note_content":UE.getEditor('editor').getContent()},
@@ -254,7 +259,7 @@ $(".Hui-aside").on("click","dl dd a.note",function(){
     $(this).next().slideToggle();
     $(this).closest('li').siblings().children('ul#second').slideUp();
     $.ajax({
-        url:path+"/note/loadNoteContent.do",
+        url:path+"/note/loadNoteContent.action",
         type:"post",
         data:{"note_id":$(this).attr("id")},
         dataType:"json",
@@ -276,7 +281,7 @@ $(".Hui-aside").on("click","dl dd ul#second a.moveBtn",function(){
         type: 2,
         title: '移动笔记',
         offset:"auto",
-        content:[path+'/note/tomovenote.do', 'no'],
+        content:[path+'/note/tomovenote.action', 'no'],
         success: function (layero, index) {
             var body = layer.getChildFrame('body', index);
             var iframeWin = window[layero.find('iframe')[0]['name']];
@@ -302,7 +307,7 @@ $(".Hui-aside").on("click","dl dd ul#second a.starBtn",function(){
     var note_id= $(this).closest("ul").siblings("a").eq(0).attr("id");
     var li = $(this).parent();
     $.ajax({
-        url:path+"/note/starnote.do",
+        url:path+"/note/starnote.action",
         data:{"note_id":note_id},
         type:"post",
         dataType:"json",
@@ -326,7 +331,7 @@ $(".Hui-aside").on("click","dl dd ul#second a.remBtn",function(){
     var note_id= $(this).closest("ul").siblings("a").eq(0).attr("id");
     var li = $(this).parent();
     $.ajax({
-        url:path+"/note/unstarnote.do",
+        url:path+"/note/unstarnote.action",
         data:{"note_id":note_id},
         type:"post",
         dataType:"json",
@@ -351,7 +356,7 @@ $(".Hui-aside").on("click","dl dd ul#second a.delBtn",function(){
     }, function(){
         //第一个按钮的功能
         $.ajax({
-            url:path+"/note/movetotrash.do",
+            url:path+"/note/movetotrash.action",
             data:{"note_id":note_id},
             type:"post",
             dataType:"json",
@@ -372,7 +377,7 @@ $(".Hui-aside").on("click","dl dd ul#second a.delBtn",function(){
 function loadtrash(obj){
     var $body = $(obj);
     $.ajax({
-        url:path+"/note/loadtrash.do",
+        url:path+"/note/loadtrash.action",
         type:"post",
         data:{"user_id":$.cookie("user_id")},
         dataTyep:"json",
@@ -416,7 +421,7 @@ $(document).on('click',"#searchBtn",function(){
         parent.layer.msg("请输入需要模糊查询笔记",{icon:0,time:1000});
     }else{
         $.ajax({
-            url:path+"/note/searchnotes.do",
+            url:path+"/note/searchnotes.action",
             data:{"user_id":$.cookie("user_id"),"note_title":note_name},
             type:"post",
             dataType:"json",
@@ -457,7 +462,7 @@ function note_remove(obj){
         {btn:["确定"]},
         function(){
             $.ajax({
-                url:path+"/note/deletenote.do",
+                url:path+"/note/deletenote.action",
                 type:"post",
                 data:{"note_id":a.parents("tr").attr("id")},
                 dataType:"json",
@@ -482,7 +487,7 @@ function note_content(obj){
     var u = $(obj);
     var cont ;
     $.ajax({
-        url:path+"/note/loadNoteContent.do",
+        url:path+"/note/loadNoteContent.action",
         data:{"note_id":u.parents("tr").attr("id")},
         type:"post",
         dataType:"json",
@@ -511,7 +516,7 @@ function note_del(obj){
         {btn:["确定"]},
         function(){
             $.ajax({
-                url:path+"/note/movetotrash.do",
+                url:path+"/note/movetotrash.action",
                 type:"post",
                 data:{"note_id":a.parents("tr").attr("id")},
                 dataType:"json",
@@ -565,7 +570,7 @@ function note_recover(obj){
         {btn:["确定"]},
         function(){
             $.ajax({
-                url:path+"/note/trashrecover.do",
+                url:path+"/note/trashrecover.action",
                 type:"post",
                 data:{"note_id":a.parents("tr").attr("id")},
                 dataType:"json",
@@ -575,13 +580,13 @@ function note_recover(obj){
                         a.parents("tr").remove();
                         // a.parent().siblings("td").eq(3).text("回收站");
                         window.sessionStorage.setItem($("#index").text(),$("tbody").first().html())
-                        parent.layer.msg("已从回收站还原!",{icon:1,time:1000});
+                        parent.layer.msg(result.msg,{icon:1,time:1000});
                     }
                     else
-                        parent.layer.msg("还原错误！",{icon:0,time:1000});
+                        parent.layer.msg( result.msg,{icon:0,time:1000});
                 },
                 error:function(){
-                    parent.layer.msg("还原错误！",{icon:0,time:1000});
+                    parent.layer.msg("还原异常！",{icon:0,time:1000});
                 }
             });
         });
@@ -599,7 +604,7 @@ function createTr(information) {
     }
     else if(information.status == 2){
         sta = "回收站";
-        func = `<a style="text-decoration:none" class="ml-5" onClick="note_recover(this)" href="javascript:;" title="回收">
+        func = `<a style="text-decoration:none" class="ml-5" onClick="note_recover(this)" href="javascript:;" title="恢复">
 					<i class="Hui-iconfont">&#xe604;</i>
 				</a>`;
     }
@@ -639,7 +644,147 @@ function createTr(information) {
 	`;
     return str;
 };
-
+function chooseAll(obj){
+    var $box = $(obj);
+    if($box.prop("checked") == true)
+        for(var i = 0; i < $("tbody").children("tr").length; i++)
+            $("tbody").children("tr").eq(i).find("td").eq(0).children("input").prop("checked",true);
+    else
+        for(var i = 0; i < $("tbody").children("tr").length; i++)
+            $("tbody").children("tr").eq(i).find("td").eq(0).children("input").prop("checked",false);
+};
+function notestotrash(){
+    var array = new Array();
+    for(var i = 0; i < $("tbody").children().length; i++){
+        if($("tbody").children("tr").eq(i).children("td").eq(0).children("input").prop("checked") == true){
+            array.push($("tbody").children("tr").eq(i).attr("id"));
+        }
+    }
+    if(array.length == 0)
+        parent.layer.msg("选中的记录数目为0！",{icon:0,time:1000});
+    else{
+        var index = parent.layer.confirm('确定回收这些记录么？', {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            checkBox2(array);
+        }, function(index){
+            layer.close(index);
+        });
+    }
+};
+function checkBox2(array){
+    $.ajax({
+        url:path+"/note/movenotestotrash.action",
+        type:"post",
+        data:{"array":JSON.stringify(array)},
+        dataType:"json",
+        success:function(result){
+            if(result.status == 0){
+                parent.layer.msg(result.msg,{icon:1,time:1000});
+                for(var i = 0 ; i < array.length ; i ++){
+                    var str = "tr[id="+array[i]+"]";
+                    $(str).remove();
+                    window.sessionStorage.setItem($("#index").text(),$("tbody").first().html());
+                }
+                var length = $("strong").text();
+                $("strong").text(length- array.length);
+            }else{
+                parent.layer.msg(result.msg,{icon:0,time:1000});
+            }
+        },
+        error:function(){
+            parent.layer.msg("批量回收错误",{icon:0,time:1000});
+        }
+    });
+}
+function datadel(){
+    var array = new Array();
+    for(var i = 0; i < $("tbody").children().length; i++){
+        if($("tbody").children("tr").eq(i).children("td").eq(0).children("input").prop("checked") == true){
+            array.push($("tbody").children("tr").eq(i).attr("id"));
+        }
+    }
+    if(array.length == 0)
+        parent.layer.msg("选中的记录数目为0！",{icon:0,time:1000});
+    else{
+        var index = parent.layer.confirm('确定删除这些记录么？', {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            checkBox(array);
+        }, function(index){
+            layer.close(index);
+        });
+    }
+};
+function checkBox(array){
+    $.ajax({
+        url:path+"/note/deletenotes.action",
+        type:"post",
+        data:{"array":JSON.stringify(array)},
+        dataType:"json",
+        success:function(result){
+            if(result.status == 0){
+                parent.layer.msg(result.msg,{icon:1,time:1000});
+                for(var i = 0 ; i < array.length ; i ++){
+                    var str = "tr[id="+array[i]+"]";
+                    $(str).remove();
+                    window.sessionStorage.setItem($("#index").text(),$("tbody").first().html());
+                }
+                var length = $("strong").text();
+                $("strong").text(length- array.length);
+            }else{
+                parent.layer.msg(result.msg,{icon:0,time:1000});
+            }
+        },
+        error:function(){
+            parent.layer.msg("批量删除错误",{icon:0,time:1000});
+        }
+    });
+};
+function trashnotesrecovery(){
+    var array = new Array();
+    for(var i = 0; i < $("tbody").children().length; i++){
+        if($("tbody").children("tr").eq(i).children("td").eq(0).children("input").prop("checked") == true){
+            array.push($("tbody").children("tr").eq(i).attr("id"));
+        }
+    }
+    if(array.length == 0)
+        parent.layer.msg("选中的记录数目为0！",{icon:0,time:1000});
+    else{
+        var index = parent.layer.confirm('确定恢复这些记录么？', {
+            btn: ['确定','取消'] //按钮
+        }, function(){
+            checkBox3(array);
+        }, function(index){
+            layer.close(index);
+        });
+    }
+}
+function checkBox3(array){
+    $.ajax({
+        url:path+"/note/trashNotesRecover.action",
+        type:"post",
+        data:{"array":JSON.stringify(array)},
+        dataType:"json",
+        success:function(result){
+            if(result.status == 0){
+                parent.layer.msg(result.msg, {icon:1,time:1000});
+                for(var i = 0 ; i < array.length ; i ++){
+                    var str = "tr[id="+array[i]+"]";
+                    $(str).remove();
+                    window.sessionStorage.setItem($("#index").text(),$("tbody").first().html());
+                }
+                var length = $("strong").text();
+                $("strong").text(length- array.length);
+            }else{
+                parent.layer.msg(result.msg,{icon:0,time:1000});
+            }
+        },
+        error:function(){
+            parent.layer.msg("批量回收错误",{icon:0,time:1000});
+        }
+    });
+}
 //扩展Date的format方法
 Date.prototype.format = function (format) {
 	var o = {

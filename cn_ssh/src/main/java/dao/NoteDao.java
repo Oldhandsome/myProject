@@ -27,6 +27,8 @@ public interface NoteDao{
 
     int moveToTrash(String note_id);
 
+    int trashNoteRecovery(String note_id);
+
     List<Information> findByName(String user_id, String note_title);
 
     List<Information> trash(String user_id);
@@ -34,4 +36,6 @@ public interface NoteDao{
     int moveNotesToTrash(String ids);
 
     int trashRecovery(String ids);
+
+    int notesDelete(String ids);
 }

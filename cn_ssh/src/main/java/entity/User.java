@@ -73,4 +73,15 @@ public class User {
         result = 31 * result + (explaination != null ? explaination.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId='" + userId + '\'' +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", authoritativeCode='" + authoritativeCode + '\'' +
+                ", explaination='" + explaination + '\'' +
+                '}';
+    }
 }

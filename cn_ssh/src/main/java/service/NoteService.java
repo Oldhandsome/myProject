@@ -2,31 +2,39 @@ package service;
 
 import entity.Information;
 import entity.Note;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public interface NoteService {
     List<Note> getNotes(String book_id);
 
-    Object loadContent(String note_id) throws RuntimeException;
+    String loadContent(String note_id) throws RuntimeException;
 
-    Object updateNote(Note note);
+    String updateNote(Note note);
 
-    Object addNote(Note note);
+    String addNote(Note note);
 
-    Object deleteNote(String note_id);
+    String deleteNote(String note_id);
 
-    Object starNote(String note_id);
+    String noteToTrash(String note_id);
 
-    Object unstarNote(String note_id);
+    @Transactional
+    String tnoteRecover(String note_id) throws RuntimeException;
 
-    Object moveNote(String book_id, String note_id);
+    String starNote(String note_id);
+
+    String unstarNote(String note_id);
+
+    String moveNote(String book_id, String note_id);
 
     List<Information> findNotesByName(String user_id, String note_title);
 
     List<Information> trash(String user_id);
 
-    Object notesToTrash(String... ids);
+    String notesToTrash(String... ids);
 
-    Object notesRecovery(String... ids);
+    String notesRecovery(String... ids);
+
+    String deleteNotes(String[] ids);
 }

@@ -65,16 +65,6 @@
 <script type="text/javascript" src="../lib/webuploader/0.1.5/webuploader.min.js"></script>
 <script type="text/javascript" src="../lib/base.js"></script>
 <script type="text/javascript">
-//获取当前的笔记的ID
-//var note_id= $("#note_id").val();
-//          var deleli = 'a[id='+note_id+']';
-//	        console.log(deleli);
-            /* var $li = $(deleli,parent.document).parent();
-            console.log($li)
-            $li.remove(); */
-            //var moveli = "dl[data-bookId="+note_book_id+"]";
-            //console.log(moveli);
-			//$(moveli,parent.document).find("ul#first").append($li);
 $("#moveBtn").click(function(){
     //获取当前的笔记的ID
     var note_id= $("#note_id").val();
@@ -84,13 +74,13 @@ $("#moveBtn").click(function(){
     console.log($("#note_book_id").val())
     if($("#note_book_id_1").val() != note_book_id){
     	$.ajax({
-            url:path+"/note/movenote.do",
+            url:path+"/note/movenote.action",
             data:{"note_id":note_id,"note_book_id":note_book_id},
             type:"post",
             dataType:"json",
             success:function(result){
                 if (result.status == 0){
-                    parent.layer.msg("移动笔记成功",{icon:1,time:1000});
+                    parent.layer.msg(result.msg,{icon:1,time:1000});
                     var deleli = 'a[id='+note_id+']';
         	        var $li = $(deleli,parent.document).parent();
         	        // $li.children('ul#second').slideUp();
@@ -98,7 +88,7 @@ $("#moveBtn").click(function(){
         	        var moveli = "dl[data-bookId="+note_book_id+"]";
         	        $(moveli,parent.document).find("ul#first").append($li);
                 }else{
-                    parent.layer.msg("移动笔记失败",{icon:2,time:1000});
+                    parent.layer.msg(result.msg,{icon:2,time:1000});
                 }
                 var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
                 parent.layer.close(index);

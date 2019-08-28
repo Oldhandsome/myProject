@@ -24,7 +24,7 @@ cloudnote 云笔记:两种解决方法
 列），都很让人头痛（又不想多写大段的代码），只能通过hibernateTemplate直接操作jdbc完成数据的修改。对于简单的CRDU操作，hibernate比mybatis好一点，毕竟
 不用写sql（不过hibernate的配置文件还是有点多的，还好能自动生成）。对于struts2和springmvc两者来说：两者的功能大同小异（struts2绝大部分利用filter来完
 成工作，而springmvc则是通过servlet来完成工作），都是利用反射，实现请求参数的注入（不过，如果struts2的action请求参数不能复用，就也很无语......写一大堆
-的get/set方法，请求参数的获取都能有一屏幕），虽然这一点和springmvc按属性名利用bean对象的自动注入相似，但这么多的get/set也有点吃不消。，但也有不同之
+的get/set方法，请求参数的获取都能有一屏幕），虽然这一点和springmvc按属性名利用bean对象的自动注入相似，但这么多的get/set也有点吃不消。但也有不同之
 处：struts2的action必须是多例的，而springmvc中的控制器是单例的，并且struts2每次接受一个请求都会创建一个action，去处理请求，而spring则将请求和
 controller中的方法对应（和servlet判断请求，执行对应的方法类似）。
 并且struts2的配置文件struts.xml中需要重复配置InterceptorStack，每个package都要重复配置重复的interceptor，相对于spring的配置文件确实多了点。
